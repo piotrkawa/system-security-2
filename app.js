@@ -1,10 +1,11 @@
 const express = require('express');
-const models = require('./models');
 const bodyParser = require('body-parser');
+var morgan = require('morgan')
+
 const app = express();
 const port = 3000;
 
-
+app.use(morgan('common'))
 app.use(bodyParser.json());
 app.use(require('./api'));
 

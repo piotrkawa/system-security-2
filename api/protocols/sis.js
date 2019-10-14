@@ -1,9 +1,9 @@
 var router = require('express').Router();
 const sisService = require('../../services/sisService');
 const utilityService = require('../../services/utilityService');
+const dbService = require('../../services/dbService');
 
-
-router.post('/init', function (req, res) {
+router.post('/init', async function (req, res) {
     /**
     {
         'protocol_name": 'sis',
@@ -13,15 +13,21 @@ router.post('/init', function (req, res) {
         }
     }
     */
-    // TODO: checking 
+    
     let payload = req.body.payload;
 
     const sessionToken = utilityService.generateToken();
     const c = sisService.generateC(); 
     payload['c'] = c;
-    // dbService.saveSession(sessionToken, payload);
-    console.log(payload)
+    
+    await dbService.saveSession(sessionToken, payload); // TODO: race condition!!!!!!!!!!!
+    let ses = await dbService.findSession(sessionToken);
 
+    if (ses == null) {
+        console.log('Not Found')
+    } else {
+        console.log(ses)
+    }
 
     res.json({'session_token': sessionToken, 'payload': {'c': c}});
     /**
@@ -45,21 +51,24 @@ router.post('/verify', function (req, res) {
             }
         }
     */
-    const sessionToken = req.body.payload.session_token;
+    const sessionToken = req.body.session_token;
     const s = req.body.payload.s;
 
-    console.log(sessionToken);
-    console.log(s);
+    console.log('sessionToken: ' + sessionToken);
+    console.log('s: ' + s);
     
-    const session = dbService.findSession(sessionToken);
+    const session = dbService.findSession(sessionToken); // TODO: why is { undefined } 
+    console.log(session);
 
+    let isVerified = false;
     if (session == null) {
-        // TODO: SESSION NOT FOUND OR STH LIKE THATH
-
+        console.log('session NOT found');
+        res.status(403);
+    } else {
+        console.log('session found');
+        isVerified = sisService.verifyCommitment(session, s);
     }
 
-    const isVerified = sisService.verifyCommitment(session, s);
-    
     res.json({'verfied': isVerified})
     /**
     {

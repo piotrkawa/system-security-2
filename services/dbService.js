@@ -1,20 +1,23 @@
-// TODO: import Session model
+const models = require('../models');
 
-
-function saveSession(token, payload) {
-    Session.create({ token: token, payload: payload});
+async function saveSession(token, payload) {
+    models.Session.create({ token: token, payload: payload});
 }
 
 function findSession(sessionToken) {
-    Session.findOne({
+    console.log(sessionToken);
+    models.Session.findOne({
         where: {
            token: sessionToken
         }
      }).then(function(session) {
+        
         if (!session) {
+            console.log('false')
             return null;
         }
-        return session.dataValues;
+        console.log('TRUE')
+        return session;
      });
 }
 
