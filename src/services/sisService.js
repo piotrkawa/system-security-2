@@ -1,5 +1,5 @@
 const mcl = require('mcl-wasm');
-const CONFIG = require('../config').CONFIG;
+const CONFIG = require('../../config').CONFIG;
 const mclService = require('./mclService');
 
 async function generateC() { 
@@ -9,9 +9,9 @@ async function generateC() {
 async function verifyCommitment(session, sRequest) {
     await mcl.init(CONFIG.CURVE_TYPE); // TODO: move out
 
-    const A = mclService.generateG1(session.A);
-    const X = mclService.generateG1(session.X);
-    const c = mclService.generateFr(session.c);
+    const A = mclService.generateG1(session.payload.A);
+    const X = mclService.generateG1(session.payload.X);
+    const c = mclService.generateFr(session.payload.c);
     const s = mclService.generateFr(sRequest);
 
     const g = mclService.getGroupGenerator();

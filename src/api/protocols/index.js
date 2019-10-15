@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const CONFIG = require('../../config').CONFIG;
+const CONFIG = require('../../../config').CONFIG;
 
 
 router.use('/sis', require('./sis'));

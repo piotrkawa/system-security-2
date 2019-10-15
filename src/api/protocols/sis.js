@@ -46,16 +46,16 @@ router.post('/verify', async function (req, res) {
     const s = req.body.payload.s;
     const session = await dbService.findSession(sessionToken);
 
-    
     if (session == null) {
         // log: session not found
         res.sendStatus(403);
         return;
-    } 
-    
+    }
+
+    console.log('[SESSION]' + JSON.stringify(session.dataValues, null, 4))
     console.log('session found');
     try {
-        const isVerified = sisService.verifyCommitment(session.dataValues, s);
+        const isVerified = await sisService.verifyCommitment(session.dataValues, s);
         res.json({'verfied': isVerified})
     } catch (e) {
         res.sendStatus(403);

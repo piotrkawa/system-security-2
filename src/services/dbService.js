@@ -5,15 +5,12 @@ async function saveSession(token, payload) {
 }
 
 const findSession = async function (sessionToken) {
+    console.log(sessionToken)
     const session = await models.Session.findOne({
         where: {
            token: sessionToken
         }
      })
-    // if (!session) {
-    //     return null;
-    // }
-    // return session;
     return !session ? null : session; 
 }
 

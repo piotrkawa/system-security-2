@@ -8,7 +8,7 @@ const port = 3000;
 
 app.use(morgan('common'))
 app.use(bodyParser.json());
-app.use(require('./api'));
+app.use(require('./src/api'));
 app.use(express.json());
 
 
