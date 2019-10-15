@@ -17,7 +17,7 @@ router.post('/init', async function (req, res) {
     let payload = req.body.payload; // TODO: move to apiService.js
     const c = await sisService.generateC(); 
     payload['c'] = c;
-    const sessionToken = 'string'; //utilityService.generateToken();
+    const sessionToken = utilityService.generateToken();
     await dbService.saveSession(sessionToken, payload);
     res.json({'session_token': sessionToken, 'payload': {'c': c}});
     /**
