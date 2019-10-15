@@ -46,26 +46,23 @@ async function abc() {
 
     const session_token = responseData.session_token; 
     const c = new mcl.Fr();
-    c.setInt(responseData.payload.c);
+    c.setStr(responseData.payload.c);
 
     const ac = mcl.mul(a, c);
-    const s = mcl.add(x, ac);    
+    const s = mcl.add(ac, x);    
     
     body = {
         protocol_name: 'sis',
         session_token: session_token,
         payload: {
-            's': s.getStr()
+            's': s.getStr(10)
         }
     };
     console.log('################## verify body ##################');
     console.log(body);
 
-    await axios.post(ROOT + '/protocols/sis/verify', body)
-        .then(function (response) {
-            responseData = response.data;
-        });
-
+    resp = await axios.post(ROOT + '/protocols/sis/verify', body);
+    responseData = resp.data
     console.log('################## verify response ##################');
     console.log(responseData);
 }

@@ -6,7 +6,9 @@ mcl.init(CONFIG.CURVE_TYPE);
 
 const generateG1 = function (pointString) {
     const point = new mcl.G1();
-    point.setStr("1 " + pointString);
+    a = `1 ${pointString}`
+    console.log('[][][][][][][][] ' + a)
+    point.setStr(a);
     return point;
 }
 

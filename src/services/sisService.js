@@ -8,7 +8,7 @@ async function generateC() {
 
 async function verifyCommitment(session, sRequest) {
     await mcl.init(CONFIG.CURVE_TYPE); // TODO: move out
-
+    
     const A = mclService.generateG1(session.payload.A);
     const X = mclService.generateG1(session.payload.X);
     const c = mclService.generateFr(session.payload.c);
