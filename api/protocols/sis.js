@@ -3,6 +3,7 @@ const sisService = require('../../services/sisService');
 const utilityService = require('../../services/utilityService');
 const dbService = require('../../services/dbService');
 
+
 router.post('/init', async function (req, res) {
     /**
     {
@@ -13,14 +14,12 @@ router.post('/init', async function (req, res) {
         }
     }
     */
-    sessions = await dbService.getAllSessions();
-    let payload = req.body.payload;
-
-    const sessionToken = utilityService.generateToken();
+    let payload = req.body.payload; // TODO: move to apiService.js
     const c = await sisService.generateC(); 
     payload['c'] = c;
+    const sessionToken = 'string'; //utilityService.generateToken();
     await dbService.saveSession(sessionToken, payload);
-    res.json({'session_token': 'string', 'payload': {'c': c}});
+    res.json({'session_token': sessionToken, 'payload': {'c': c}});
     /**
     {
         "session_token": "string",
@@ -42,25 +41,25 @@ router.post('/verify', async function (req, res) {
             }
         }
     */
+
     const sessionToken = req.body.session_token;
     const s = req.body.payload.s;
-
-    console.log('sessionToken: ' + sessionToken);
-    console.log('s: ' + s);
-    
     const session = await dbService.findSession(sessionToken);
-    console.log(session);
 
-    let isVerified = false;
+    
     if (session == null) {
-        res.status(403);
-    } else {
-        console.log('session found');
-        console.log(session);
-        isVerified = sisService.verifyCommitment(session.dataValues, s);
+        // log: session not found
+        res.sendStatus(403);
+        return;
+    } 
+    
+    console.log('session found');
+    try {
+        const isVerified = sisService.verifyCommitment(session.dataValues, s);
+        res.json({'verfied': isVerified})
+    } catch (e) {
+        res.sendStatus(403);
     }
-
-    res.json({'verfied': isVerified})
     /**
     {
         "verified": true / false

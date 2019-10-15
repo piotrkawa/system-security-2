@@ -10,6 +10,10 @@ const findSession = async function (sessionToken) {
            token: sessionToken
         }
      })
+    // if (!session) {
+    //     return null;
+    // }
+    // return session;
     return !session ? null : session; 
 }
 
