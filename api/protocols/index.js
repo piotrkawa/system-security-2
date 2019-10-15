@@ -1,10 +1,11 @@
-var router = require('express').Router();
+const router = require('express').Router();
+const CONFIG = require('../../config').CONFIG;
+
+
 router.use('/sis', require('./sis'));
 
-const CURRENTLY_SUPPORTED_PROTOCOLS = ['sis'];
-
 router.get('/', function (req, res) {
-    res.send(CURRENTLY_SUPPORTED_PROTOCOLS)
+    res.send(CONFIG.CURRENTLY_SUPPORTED_PROTOCOLS)
 });
 
 module.exports = router;
