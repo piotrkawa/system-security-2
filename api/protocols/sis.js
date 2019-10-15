@@ -13,23 +13,14 @@ router.post('/init', async function (req, res) {
         }
     }
     */
-    
+    sessions = await dbService.getAllSessions();
     let payload = req.body.payload;
 
     const sessionToken = utilityService.generateToken();
-    const c = sisService.generateC(); 
+    const c = await sisService.generateC(); 
     payload['c'] = c;
-    
-    await dbService.saveSession(sessionToken, payload); // TODO: race condition!!!!!!!!!!!
-    let ses = await dbService.findSession(sessionToken);
-
-    if (ses == null) {
-        console.log('Not Found')
-    } else {
-        console.log(ses)
-    }
-
-    res.json({'session_token': sessionToken, 'payload': {'c': c}});
+    await dbService.saveSession(sessionToken, payload);
+    res.json({'session_token': 'string', 'payload': {'c': c}});
     /**
     {
         "session_token": "string",
@@ -41,7 +32,7 @@ router.post('/init', async function (req, res) {
 })
 
 
-router.post('/verify', function (req, res) {
+router.post('/verify', async function (req, res) {
     /**
         {
             "protocol_name": "sis",
@@ -57,16 +48,16 @@ router.post('/verify', function (req, res) {
     console.log('sessionToken: ' + sessionToken);
     console.log('s: ' + s);
     
-    const session = dbService.findSession(sessionToken); // TODO: why is { undefined } 
+    const session = await dbService.findSession(sessionToken);
     console.log(session);
 
     let isVerified = false;
     if (session == null) {
-        console.log('session NOT found');
         res.status(403);
     } else {
         console.log('session found');
-        isVerified = sisService.verifyCommitment(session, s);
+        console.log(session);
+        isVerified = sisService.verifyCommitment(session.dataValues, s);
     }
 
     res.json({'verfied': isVerified})

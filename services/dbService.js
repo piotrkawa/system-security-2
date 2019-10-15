@@ -1,24 +1,22 @@
 const models = require('../models');
 
 async function saveSession(token, payload) {
-    models.Session.create({ token: token, payload: payload});
+    await models.Session.create({ token: token, payload: payload});
 }
 
-function findSession(sessionToken) {
-    console.log(sessionToken);
-    models.Session.findOne({
+const findSession = async function (sessionToken) {
+    const session = await models.Session.findOne({
         where: {
            token: sessionToken
         }
-     }).then(function(session) {
-        
-        if (!session) {
-            console.log('false')
-            return null;
-        }
-        console.log('TRUE')
-        return session;
-     });
+     })
+    return !session ? null : session; 
 }
 
-module.exports = { saveSession, findSession }
+
+const getAllSessions = async function () {
+    const sessions = await models.Session.findAll();
+    return !sessions ? null : sessions; 
+}
+
+module.exports = { saveSession, findSession, getAllSessions }
