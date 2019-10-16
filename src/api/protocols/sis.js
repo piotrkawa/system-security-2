@@ -5,7 +5,7 @@ const dbService = require('../../services/dbService');
 
 
 router.post('/init', async function (req, res) {
-    /**
+    /*
     {
         'protocol_name": 'sis',
         "payload": {
@@ -20,7 +20,7 @@ router.post('/init', async function (req, res) {
     const sessionToken = utilityService.generateToken();
     await dbService.saveSession(sessionToken, payload);
     res.json({'session_token': sessionToken, 'payload': {'c': c}});
-    /**
+    /*
     {
         "session_token": "string",
         "payload": {
@@ -32,7 +32,7 @@ router.post('/init', async function (req, res) {
 
 
 router.post('/verify', async function (req, res) {
-    /**
+    /*
         {
             "protocol_name": "sis",
             "session_token": "string",
@@ -41,7 +41,6 @@ router.post('/verify', async function (req, res) {
             }
         }
     */
-
     const sessionToken = req.body.session_token;
     const s = req.body.payload.s;
     const session = await dbService.findSession(sessionToken);
@@ -52,15 +51,13 @@ router.post('/verify', async function (req, res) {
         return;
     }
 
-    console.log('[SESSION]' + JSON.stringify(session.dataValues, null, 4))
-    console.log('session found');
     try {
         const isVerified = await sisService.verifyCommitment(session.dataValues, s);
-        res.json({'verfied': isVerified})
+        res.json({'verified': isVerified})
     } catch (e) {
         res.sendStatus(403);
     }
-    /**
+    /*
     {
         "verified": true / false
     }
