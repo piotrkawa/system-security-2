@@ -1,9 +1,11 @@
-const mcl = require('mcl-wasm');
 const CONFIG = require('../../config').CONFIG;
-
 const mclService = require('./mclService');
+const mcl = require('mcl-wasm');
 
-mcl.init(CONFIG.CURVE_TYPE); // TODO: move out
+mcl.init(CONFIG.CURVE_TYPE);
+
+const CONST_G = CONFIG.sis.CONST_G;
+// console.log(CONST_G)
 
 async function generateC() { 
     return mclService.getRandomScalar().getStr();
@@ -17,15 +19,17 @@ async function verifyCommitment(session, sRequest) {
     const c = mclService.generateFr(payload.c);
     const s = mclService.generateFr(sRequest);
 
-    const g = mclService.getGroupGenerator();
+    const g = getGroupGenerator();
 
     const leftSide = mcl.mul(g, s);
     const rightSide = mcl.add(X, mcl.mul(A, c));
 
-    // console.log('#######################')
-    // console.log('left side: ' + leftSide.getStr());
-    // console.log('right side: ' + rightSide.getStr());
     return leftSide.getStr() === rightSide.getStr();
 }
 
-module.exports = { generateC, verifyCommitment }
+
+function getGroupGenerator () { 
+    return mclService.generateG1(`${CONST_G.x} ${CONST_G.y}`); 
+}
+
+module.exports = { getGroupGenerator, generateC, verifyCommitment }

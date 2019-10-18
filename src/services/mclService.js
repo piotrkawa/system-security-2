@@ -1,6 +1,5 @@
-const mcl = require('mcl-wasm');
 const CONFIG = require('../../config').CONFIG;
-const CONST_G1 = CONFIG.CONST_G1;
+const mcl = require('mcl-wasm');
 
 mcl.init(CONFIG.CURVE_TYPE);
 
@@ -22,8 +21,4 @@ function getRandomScalar () {
     return r;
 }
 
-function getGroupGenerator () { 
-    return generateG1(`${CONST_G1.x} ${CONST_G1.y}`); 
-}
-
-module.exports = { getGroupGenerator, generateG1, generateFr, getRandomScalar }
+module.exports = { generateG1, generateFr, getRandomScalar }

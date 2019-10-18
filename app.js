@@ -14,8 +14,8 @@ app.use(express.json());
 
 new OpenApiValidator({ // TODO: enable validation
     apiSpec: require('./openapi/api.json'),
-    validateRequests: true, // (default)
-    validateResponses: true, // false by default
+    validateRequests: true,
+    validateResponses: true,
 }).install(app);
 
 app.use((err, req, res, next) => {
