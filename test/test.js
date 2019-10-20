@@ -56,7 +56,6 @@ describe("SIS", () => {
                                        .post('/protocols/sis/verify')
                                        .send(body);
             assert(response.body.verified)
-            // console.log(response.body)
             done();
         });
     });
@@ -115,9 +114,6 @@ describe("OIS", () => {
             response = await chai.request(app)
                                        .post('/protocols/ois/verify')
                                        .send(body);
-            responseData = response.body
-            console.log('################## verify response ##################');
-            console.log(responseData);
             assert(response.body.verified)
             done();
         });

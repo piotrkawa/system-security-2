@@ -23,5 +23,5 @@ const CONFIG = {
 
 mcl.init(CONFIG.CURVE_TYPE);
 
-// module.exports = { CONFIG, mcl }
-module.exports = { CONFIG }  
+module.exports = { CONFIG, mcl }
+// module.exports = { CONFIG }  

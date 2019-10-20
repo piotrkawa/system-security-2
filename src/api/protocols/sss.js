@@ -1,32 +1,23 @@
 var router = require('express').Router();
-const oisService = require('../../services/oisService');
+const sssService = require('../../services/oisService');
 const utilityService = require('../../services/utilityService');
 const dbService = require('../../services/dbService');
-
-router.post('/init', async function (req, res) {
-    let payload = req.body.payload;
-    const c = await oisService.generateC(); 
-    payload['c'] = c;
-    const sessionToken = utilityService.generateToken();
-    await dbService.saveSession(sessionToken, payload);
-    res.json({'session_token': sessionToken, 'payload': {'c': c}});
-})
 
 
 router.post('/verify', async function (req, res) {
     /*
         {
-            "protocol_name": "ois",
-            "session_token": "string",
+            "protocol_name": "sss",
             "payload": {
-                "s1": "12345 67890",
-                "s2": "12345 67890"
+                "s": "12345 67890",
+                "X": "12345 67890",
+                "A": "12345 67890",
+                "msg": "Test message"
             }
         }
     */
 
-    const { s1, s2 } = req.body.payload;
-    const sessionToken = req.body.session_token;
+    const { s1, X, A, msg } = req.body.payload;
     const session = await dbService.findSession(sessionToken);
 
     if (session == null) {
@@ -41,6 +32,11 @@ router.post('/verify', async function (req, res) {
     } catch (e) {
         res.sendStatus(400);
     }
+    /*
+        {
+            "verified": true  / false
+        } 
+    */
 })
 
 module.exports = router;

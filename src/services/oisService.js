@@ -1,9 +1,9 @@
 const mclService = require('./mclService');
-const CONFIG = require('../../config').CONFIG;
-const mcl = require('mcl-wasm');
+const { CONFIG, mcl } = require('../../config');
 
 const CONST_G1 = CONFIG.ois.CONST_G1;
 const CONST_G2 = CONFIG.ois.CONST_G2;
+
 
 async function generateC() { 
     return mclService.getRandomScalar().getStr();
