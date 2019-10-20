@@ -5,6 +5,7 @@ const assert = require('assert');
 const CONFIG = require('../config').CONFIG;
 const mclService = require('../src/services/mclService');
 const oisService = require('../src/services/oisService');
+const sssService = require('../src/services/sssService');
 
 const instance = axios.create({
     headers: {
@@ -16,9 +17,36 @@ const instance = axios.create({
 
 ROOT = 'http://127.0.0.1:3000'
 
-async function manualSIS() {
 
+async function manualSSS() {
+    await mcl.init(CONFIG.CURVE_TYPE);
+    
+    const msg = "JAN PAWEŁ DRUGI";
+
+    const g = sssService.getGroupGenerator();
+    const a = mclService.getRandomScalar();
+    const A = mcl.mul(g, a);
+    const x = mclService.getRandomScalar();
+    const X = mcl.mul(g, x);
+    const c = await sssService.computeC(msg, X);
+    const s = mcl.add(x, mcl.mul(a, c));
+
+    let body = {
+        protocol_name: 'sss',
+        payload: {
+            s: s.getStr(10),
+            X: X.getStr(10).slice(2),
+            A: A.getStr(10).slice(2),
+            msg: msg
+        }
+    };
+
+    let responseData = await axios.post(ROOT + '/protocols/sss/verify', body);
+    responseData = responseData.data;
+    console.log(responseData);
 }
+
+manualSSS()
 
 async function manualOIS() { 
     await mcl.init(CONFIG.CURVE_TYPE);
@@ -79,6 +107,10 @@ async function manualOIS() {
     responseData = resp.data
     console.log('################## verify response ##################');
     assert(responseData.verified);
+}
+
+async function manualSIS() {
+
 }
 
 // manualOIS()

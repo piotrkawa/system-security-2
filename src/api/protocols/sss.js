@@ -1,6 +1,5 @@
 var router = require('express').Router();
-const sssService = require('../../services/oisService');
-const utilityService = require('../../services/utilityService');
+const sssService = require('../../services/sssService');
 const dbService = require('../../services/dbService');
 
 
@@ -16,22 +15,13 @@ router.post('/verify', async function (req, res) {
             }
         }
     */
-
-    const { s1, X, A, msg } = req.body.payload;
-    const session = await dbService.findSession(sessionToken);
-
-    if (session == null) {
-        // log: session not found
-        res.sendStatus(403);
-        return;
-    }
-
-    try {
-        const isVerified = await oisService.verifyCommitment(session.dataValues, s1, s2);
-        res.json({'verified': isVerified});
-    } catch (e) {
-        res.sendStatus(400);
-    }
+    // try {
+    let payload = req.body.payload;
+    const isVerified = await sssService.verifyCommitment(payload);
+    res.json({'verified': isVerified});
+    // } catch (e) {
+        // res.sendStatus(400);
+    // }
     /*
         {
             "verified": true  / false
