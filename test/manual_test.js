@@ -21,14 +21,14 @@ ROOT = 'http://127.0.0.1:3000'
 async function manualSSS() {
     await mcl.init(CONFIG.CURVE_TYPE);
     
-    const msg = "JAN PAWEŁ DRUGI";
+    const msg = "MY MESSAGE";
 
     const g = sssService.getGroupGenerator();
     const a = mclService.getRandomScalar();
     const A = mcl.mul(g, a);
     const x = mclService.getRandomScalar();
     const X = mcl.mul(g, x);
-    const c = await sssService.computeC(msg, X);
+    const c = sssService.computeC(msg, X);
     const s = mcl.add(x, mcl.mul(a, c));
 
     let body = {
@@ -43,7 +43,8 @@ async function manualSSS() {
 
     let responseData = await axios.post(ROOT + '/protocols/sss/verify', body);
     responseData = responseData.data;
-    console.log(responseData);
+    // console.log(responseData);
+    assert(responseData.verified);
 }
 
 manualSSS()
