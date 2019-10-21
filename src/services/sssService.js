@@ -1,12 +1,14 @@
 const { CONFIG, mcl } = require('../../config');
 const mclService = require('./mclService');
-const sha512 = require('js-sha512');
+const crypto = require('crypto');
 
 const CONST_G = CONFIG.sss.CONST_G;
 
-async function computeC(msg, X) { 
+function computeC(msg, X) { 
+    const hash = crypto.createHash('sha3-512');
     const inner = msg + X.getStr();
-    const cString = sha512.digest(inner);
+    hash.update(inner);
+    const cString = hash.digest('hex')
     return mcl.hashToFr(cString);
 }
 
@@ -15,7 +17,7 @@ async function verifyCommitment(payload) {
     const X = mclService.generateG1(payload.X);
     const s = mclService.generateFr(payload.s);
     const msg = payload.msg;
-    const c = await computeC(msg, X);    
+    const c = computeC(msg, X);    
     const g = getGroupGenerator();
 
     const leftSide = mcl.mul(g, s);

@@ -3,11 +3,11 @@ const mclService = require('./mclService');
 
 const CONST_G = CONFIG.sis.CONST_G;
 
-async function generateC() { 
+async function generateC () { 
     return mclService.getRandomScalar().getStr();
 }
 
-async function verifyCommitment(session, sRequest) {
+async function verifyCommitment (session, sRequest) {
     const payload = session.payload
 
     const A = mclService.generateG1(payload.A);
