@@ -1,14 +1,13 @@
 const { CONFIG, mcl } = require('../../config');
 const mclService = require('./mclService');
 const crypto = require('crypto');
+const utilityService = require('./utilityService');
+
 
 const CONST_G = CONFIG.sss.CONST_G;
 
 function computeC(msg, X) { 
-    const hash = crypto.createHash('sha3-512');
-    const inner = msg + X.getStr();
-    hash.update(inner);
-    const cString = hash.digest('hex')
+    const cString = utilityService.getHashOfValue(msg + X.getStr());
     return mcl.hashToFr(cString);
 }
 

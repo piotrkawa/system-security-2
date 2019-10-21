@@ -6,6 +6,9 @@ const CONFIG = require('../config').CONFIG;
 const mclService = require('../src/services/mclService');
 const oisService = require('../src/services/oisService');
 const sssService = require('../src/services/sssService');
+const msisService = require('../src/services/msisService');
+const utilityService = require('../src/services/utilityService');
+
 
 const instance = axios.create({
     headers: {
@@ -16,6 +19,56 @@ const instance = axios.create({
 });
 
 ROOT = 'http://127.0.0.1:3000'
+
+
+async function manualMSIS() {
+    await mcl.init(CONFIG.CURVE_TYPE);
+
+    const g = msisService.getGroupGenerator();
+    const a = mclService.getRandomScalar();
+    const A = mcl.mul(g, a);
+
+    const x = mclService.getRandomScalar();
+    const X = mcl.mul(g, x);
+
+    let body = {
+        protocol_name: 'msis',
+        payload: {
+            A: A.getStr(10).slice(2),
+            X: X.getStr(10).slice(2)
+        }
+    };
+
+    let responseData = await axios.post(ROOT + '/protocols/msis/init', body);
+    responseData = responseData.data;
+    const session_token = responseData.session_token; 
+    const c = new mcl.Fr();
+    c.setStr(responseData.payload.c);
+
+    // const gHatString = utilityService.getHashOfValue(X.getStr() + c.getStr());
+    const gHat = mcl.hashAndMapToG2(X.serializeToHexStr() + c.serializeToHexStr());
+    
+    const exponent = mcl.add(x, mcl.mul(a, c));
+    const S = mcl.mul(gHat, exponent);
+
+    body = {
+        protocol_name: 'msis',
+        session_token: session_token,
+        payload: {
+            S: S.getStr(10).slice(2)
+        }
+    };
+
+    console.log('################## verify body ##################');
+    console.log(body);
+
+    resp = await instance.post(ROOT + '/protocols/msis/verify', body);
+    responseData = resp.data
+    console.log('################## verify response ##################');
+    assert(responseData.verified);
+}
+
+manualMSIS()
 
 
 async function manualSSS() {
@@ -43,11 +96,11 @@ async function manualSSS() {
 
     let responseData = await axios.post(ROOT + '/protocols/sss/verify', body);
     responseData = responseData.data;
-    // console.log(responseData);
+    console.log(responseData);
     assert(responseData.verified);
 }
 
-manualSSS()
+// manualSSS()
 
 async function manualOIS() { 
     await mcl.init(CONFIG.CURVE_TYPE);
