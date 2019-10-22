@@ -8,7 +8,7 @@ router.use('/sss', require('./sss'));
 router.use('/msis', require('./msis'));
 
 router.get('/', function (req, res) {
-    res.send(CONFIG.CURRENTLY_SUPPORTED_PROTOCOLS)
+    res.send({'schemas': CONFIG.CURRENTLY_SUPPORTED_PROTOCOLS})
 });
 
 module.exports = router;

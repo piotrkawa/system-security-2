@@ -15,13 +15,12 @@ router.post('/verify', async function (req, res) {
             }
         }
     */
-   const isValid = true;
     try {
         let payload = req.body.payload;
         const isValid = await sssService.verifySignature(payload);
         res.json({'valid': isValid});
     } catch (e) {
-        res.sendStatus(400);
+        res.sendStatus(403);
     }
     /*
         {

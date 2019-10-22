@@ -48,7 +48,6 @@ async function msis(address) {
     resp = await axios.post(address + '/protocols/msis/verify', body);
     responseData = resp.data
     assert(responseData.verified);
-    console.log(responseData);
 }
 
 

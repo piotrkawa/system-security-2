@@ -1,7 +1,5 @@
 const { CONFIG, mcl } = require('../../config');
 const mclService = require('./mclService');
-const utilityService = require('./utilityService');
-
 
 const CONST_G = CONFIG.msis.CONST_G;
 
