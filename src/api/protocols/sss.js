@@ -1,8 +1,7 @@
 var router = require('express').Router();
 const sssService = require('../../services/sssService');
 const dbService = require('../../services/dbService');
-
-
+  
 router.post('/verify', async function (req, res) {
     /*
         {
@@ -15,6 +14,7 @@ router.post('/verify', async function (req, res) {
             }
         }
     */
+
     try {
         let payload = req.body.payload;
         const isValid = await sssService.verifySignature(payload);
