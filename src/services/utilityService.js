@@ -1,5 +1,6 @@
 const uuidv4 = require('uuid/v4');
-const { SHA3 } = require('sha3');
+// const { SHA3 } = require('sha3');
+const crypto = require('crypto');
 
 
 function generateToken () {
@@ -8,7 +9,7 @@ function generateToken () {
 }
 
 function getHashOfValue(value) {
-    const hash = SHA3(512);
+    const hash = crypto.createHash('sha3-512');
     hash.update(value);
     return hash.digest('hex');
 }

@@ -19,7 +19,6 @@ async function verifyCommitment (session, SRequest) {
 
     const g = getGroupGenerator();
 
-    // const gHatString = utilityService.getHashOfValue(X.getStr() + c.getStr());
     const gHat = mcl.hashAndMapToG2(X.serializeToHexStr() + c.serializeToHexStr());
     const XAc = mcl.add(X, mcl.mul(A, c)); 
     

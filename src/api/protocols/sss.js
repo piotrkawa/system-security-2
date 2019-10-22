@@ -15,16 +15,17 @@ router.post('/verify', async function (req, res) {
             }
         }
     */
-    // try {
-    let payload = req.body.payload;
-    const isVerified = await sssService.verifyCommitment(payload);
-    res.json({'verified': isVerified});
-    // } catch (e) {
-        // res.sendStatus(400);
-    // }
+   const isValid = true;
+    try {
+        let payload = req.body.payload;
+        const isValid = await sssService.verifySignature(payload);
+        res.json({'valid': isValid});
+    } catch (e) {
+        res.sendStatus(400);
+    }
     /*
         {
-            "verified": true  / false
+            "valid": true  / false
         } 
     */
 })

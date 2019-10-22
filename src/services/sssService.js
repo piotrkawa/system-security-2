@@ -1,17 +1,16 @@
 const { CONFIG, mcl } = require('../../config');
 const mclService = require('./mclService');
-const crypto = require('crypto');
 const utilityService = require('./utilityService');
 
 
 const CONST_G = CONFIG.sss.CONST_G;
 
 function computeC(msg, X) { 
-    const cString = utilityService.getHashOfValue(msg + X.getStr());
+    const cString = utilityService.getHashOfValue(msg + X.getStr(10).slice(2));
     return mcl.hashToFr(cString);
 }
 
-async function verifyCommitment(payload) {
+async function verifySignature(payload) {
     const A = mclService.generateG1(payload.A);
     const X = mclService.generateG1(payload.X);
     const s = mclService.generateFr(payload.s);
@@ -30,4 +29,4 @@ function getGroupGenerator () {
     return mclService.generateG1(`${CONST_G.x} ${CONST_G.y}`); 
 }
 
-module.exports = { getGroupGenerator, computeC, verifyCommitment }
+module.exports = { getGroupGenerator, computeC, verifySignature }

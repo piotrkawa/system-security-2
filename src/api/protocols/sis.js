@@ -53,7 +53,12 @@ router.post('/verify', async function (req, res) {
 
     try {
         const isVerified = await sisService.verifyCommitment(session.dataValues, s);
-        res.json({'verified': isVerified})
+        if (isVerified === true) {
+            res.status(200).json({'verified': isVerified});
+        } else {
+            res.status(403).json({'verified': isVerified});
+        }
+        
     } catch (e) {
         res.sendStatus(403);
     }

@@ -51,13 +51,13 @@ router.post('/verify', async function (req, res) {
         return;
     }
 
-    // try {
-    const isVerified = await msisService.verifyCommitment(session.dataValues, S);
-    res.json({'verified': isVerified})
-    // } catch (e) {
-        // console.log(e);
-        // res.sendStatus(403);
-    // }
+    try {
+        const isVerified = await msisService.verifyCommitment(session.dataValues, S);
+        res.json({'verified': isVerified})
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(403);
+    }
     /*
     {
         "verified": true / false
