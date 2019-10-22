@@ -1,7 +1,9 @@
 var router = require('express').Router();
+
 const sssService = require('../../services/sssService');
-const dbService = require('../../services/dbService');
-  
+const { LOGGER } = require('../../../logging');
+
+
 router.post('/verify', async function (req, res) {
     /*
         {
@@ -14,12 +16,17 @@ router.post('/verify', async function (req, res) {
             }
         }
     */
+   
+    LOGGER.log({message: `[SSS Verify] Verify started`});
+    let payload = req.body.payload;
+    LOGGER.log({message: `[SSS Verify] Payload: ${JSON.stringify(payload)}`});
 
     try {
-        let payload = req.body.payload;
         const isValid = await sssService.verifySignature(payload);
+        LOGGER.log({message: `[SSS Verify] Valid: ${isValid}`});
         res.json({'valid': isValid});
     } catch (e) {
+        LOGGER.log({message: `[SSS Verify] Validation not successful`});
         res.sendStatus(403);
     }
     /*

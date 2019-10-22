@@ -5,6 +5,7 @@ const mcl = require('mcl-wasm');
 const { CONFIG } = require('../config');
 const mclService = require('../src/services/mclService');
 const sssService = require('../src/services/sssService');
+// const { LOGGER } = require('../../../logging');
 
 
 async function sss(address) {
