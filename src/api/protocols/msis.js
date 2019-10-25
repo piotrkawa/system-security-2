@@ -15,7 +15,7 @@ router.post('/init', async function (req, res) {
     }
     */
     let payload = req.body.payload;
-    const c = await msisService.generateC(); 
+    const c = msisService.generateC(); 
     payload['c'] = c;
     const sessionToken = utilityService.generateToken();
     await dbService.saveSession(sessionToken, payload);

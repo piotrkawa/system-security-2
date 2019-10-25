@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const OpenApiValidator = require('express-openapi-validator').OpenApiValidator;
 
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 
 app.use(morgan('common'))
 app.use(bodyParser.json());

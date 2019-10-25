@@ -3,7 +3,7 @@ const mclService = require('./mclService');
 
 const CONST_G = CONFIG.msis.CONST_G;
 
-async function generateC () { 
+function generateC () { 
     return mclService.getRandomScalar().getStr();
 }
 

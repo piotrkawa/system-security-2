@@ -9,7 +9,6 @@ function computeC(msg, X) {
     const inner = msg + X.getStr(10).slice(2);
     const cString = utilityService.getHashOfValue(inner);
     const c = mcl.hashToFr(cString);
-    return c
 }
 
 async function verifySignature(payload) {

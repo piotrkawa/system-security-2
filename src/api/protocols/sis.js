@@ -20,7 +20,7 @@ router.post('/init', async function (req, res) {
     let payload = req.body.payload;
     LOGGER.log({message: `[SIS Init] Payload: ${JSON.stringify(payload)}`});
 
-    const c = await sisService.generateC();
+    const c = sisService.generateC();
     payload['c'] = c;
     const sessionToken = utilityService.generateToken();
     await dbService.saveSession(sessionToken, payload);

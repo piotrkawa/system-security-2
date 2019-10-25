@@ -4,36 +4,36 @@ const mcl = require('mcl-wasm');
 
 const { CONFIG } = require('../config');
 const mclService = require('../src/services/mclService');
-const sssService = require('../src/services/sssService');
+const blsssService = require('../src/services/blsssService');
 
 
-async function sss(address) {
+async function blsss(address) {
     await mcl.init(CONFIG['CURVE_TYPE']);
 
     const msg = "MY MESSAGE";
 
-    const g = sssService.getGroupGenerator();
+    const g = blsssService.getGroupGenerator();
     const a = mclService.getRandomScalar();
     const A = mcl.mul(g, a);
+
+    const h = mcl.hashAndMapToG2(msg);
     const x = mclService.getRandomScalar();
-    const X = mcl.mul(g, x);
-    const c = sssService.computeC(msg, X);
-    const s = mcl.add(x, mcl.mul(a, c));
+    const sigma = mcl.mul(h, x);
 
     let body = {
-        protocol_name: 'sss',
+        protocol_name: 'blsss',
         payload: {
-            s: s.getStr(10),
-            X: X.getStr(10).slice(2),
+            sigma: sigma.getStr(10).slice(2),
             A: A.getStr(10).slice(2),
             msg: msg
         }
     };
 
-    let responseData = await axios.post(address + '/protocols/sss/verify', body);
+    let responseData = await axios.post(address + '/protocols/blsss/verify', body);
     responseData = responseData.data;
-    assert(responseData.valid);
+    console.log(responseData);
+    // assert(responseData.valid);
 }
 
 
-module.exports = { sss }
+module.exports = { blsss }

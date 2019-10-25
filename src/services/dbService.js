@@ -1,7 +1,9 @@
 const models = require('../models');
+const { LOGGER } = require('../../logging');
 
 async function saveSession(token, payload) {
     await models.Session.create({ token: token, payload: payload});
+    LOGGER.log({message: `Session saved`});
 }
 
 const findSession = async function (sessionToken) {

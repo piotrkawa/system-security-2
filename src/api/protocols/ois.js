@@ -9,9 +9,9 @@ const { LOGGER } = require('../../../logging');
 router.post('/init', async function (req, res) {
     LOGGER.log({message: `[OIS Init] Init started`});
     let payload = req.body.payload;
-    LOGGER.log({message: `[OIS Init] Payload: ${payload}`});
+    LOGGER.log({message: `[OIS Init] Payload: ${JSON.stringify(payload)}`});
 
-    const c = await oisService.generateC();
+    const c = oisService.generateC();
     payload['c'] = c;
     const sessionToken = utilityService.generateToken();
     await dbService.saveSession(sessionToken, payload);
