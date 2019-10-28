@@ -2,7 +2,11 @@ const winston = require('winston');
 
 const LOGGER = winston.createLogger({
     level: 'info',
-    format: winston.format.json(),
+    format: winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.json(),
+    ),
+    
     defaultMeta: { level: 'info' },
     transports: [
       new winston.transports.File({ filename: 'error.log', level: 'error' }),

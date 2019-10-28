@@ -17,8 +17,7 @@ async function blsss(address) {
     const A = mcl.mul(g, a);
 
     const h = mcl.hashAndMapToG2(msg);
-    const x = mclService.getRandomScalar();
-    const sigma = mcl.mul(h, x);
+    const sigma = mcl.mul(h, a);
 
     let body = {
         protocol_name: 'blsss',
@@ -32,7 +31,7 @@ async function blsss(address) {
     let responseData = await axios.post(address + '/protocols/blsss/verify', body);
     responseData = responseData.data;
     console.log(responseData);
-    // assert(responseData.valid);
+    assert(responseData.valid);
 }
 
 

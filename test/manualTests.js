@@ -19,8 +19,8 @@ const { address, port } = ENDPOINTS_CONFIG['localhost'];
 const ROOT = `http://${address}:${port}`
 
 async function test () {
-    performAvailableProtocols()
-    // testManually()
+    // performAvailableProtocols()
+    testManually()
 }
 
 async function testManually() {
