@@ -1,12 +1,22 @@
 const winston = require('winston');
 
+class TimestampFirst {
+    transform(obj) {
+        return Object.assign({
+            timestamp: obj.timestamp
+        }, obj);
+    }
+}
+
+const timeStampFirstFormat = winston.format.combine(
+    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
+    new TimestampFirst(true),
+    winston.format.json()
+);
+
 const LOGGER = winston.createLogger({
     level: 'info',
-    format: winston.format.combine(
-      winston.format.timestamp(),
-      winston.format.json(),
-    ),
-    
+    format: timeStampFirstFormat,
     defaultMeta: { level: 'info' },
     transports: [
       new winston.transports.File({ filename: 'error.log', level: 'error' }),
@@ -15,7 +25,7 @@ const LOGGER = winston.createLogger({
         format: winston.format.combine(
             winston.format.colorize(),
             winston.format.simple()
-        )
+        ),
       }),
     ]
   });
