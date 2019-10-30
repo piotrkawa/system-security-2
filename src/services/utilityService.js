@@ -1,5 +1,4 @@
 const uuidv4 = require('uuid/v4');
-// const { SHA3 } = require('sha3');
 const crypto = require('crypto');
 
 
@@ -14,4 +13,19 @@ function getHashOfValue(value) {
     return hash.digest('hex');
 }
 
-module.exports = { generateToken, getHashOfValue}
+
+function getRandomBits(numberOfBits) {
+    let bits = "";
+    for (i=0; i<numberOfBits; i++) {
+        let randomBit = randomInt(0, 1);
+        bits += randomBit;
+    }
+    return bits;
+}
+
+
+function randomInt(low, high) {
+    return Math.floor(Math.random() * (high - low + 1) + low);
+}
+
+module.exports = { generateToken, getHashOfValue, getRandomBits }

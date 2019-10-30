@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const SIS = require('./sis');
+const SIS = require('./sis'); // # TODO: curly braces
 const OIS = require('./ois');
 const MSIS = require('./msis');
 const SSS = require('./sss');
@@ -13,6 +13,7 @@ const MY_PROTOCOLS = {
     'ois': OIS.ois,
     'msis': MSIS.msis,
     'sss': SSS.sss,
+    'blsss': BLSSS.blsss
 };
 
 const { address, port } = ENDPOINTS_CONFIG['localhost'];
@@ -24,7 +25,7 @@ async function test () {
 }
 
 async function testManually() {
-    BLSSS.blsss(ROOT)
+    GJSS.gjss(ROOT);
 }
 
 async function performAvailableProtocols() {
