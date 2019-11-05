@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const SIS = require('./sis'); // # TODO: curly braces
+const SIS = require('./sis');
 const OIS = require('./ois');
 const MSIS = require('./msis');
 const SSS = require('./sss');
@@ -20,12 +20,12 @@ const { address, port } = ENDPOINTS_CONFIG['localhost'];
 const ROOT = `http://${address}:${port}`
 
 async function test () {
-    // performAvailableProtocols()
-    testManually()
+    performAvailableProtocols()
 }
 
 async function testManually() {
-    GJSS.gjss(ROOT);
+    // GJSS.gjss(ROOT);
+    SSS.sss(ROOT);
 }
 
 async function performAvailableProtocols() {

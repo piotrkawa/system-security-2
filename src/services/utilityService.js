@@ -1,5 +1,6 @@
 const uuidv4 = require('uuid/v4');
 const crypto = require('crypto');
+const { CONFIG }= require('../../config');
 
 
 function generateToken () {
@@ -10,7 +11,10 @@ function generateToken () {
 function getHashOfValue(value) {
     const hash = crypto.createHash('sha3-512');
     hash.update(value);
-    return hash.digest('hex');
+    const digestedHash = hash.digest('hex');
+    const r = BigInt(CONFIG.r);
+    const hashInt = BigInt('0x' + digestedHash);
+    return (hashInt % r).toString();
 }
 
 

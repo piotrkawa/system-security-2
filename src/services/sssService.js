@@ -1,14 +1,15 @@
 const { CONFIG, mcl } = require('../../config');
 const mclService = require('./mclService');
 const utilityService = require('./utilityService');
+const { LOGGER } = require('../../logging');
 
 
 const CONST_G = CONFIG.sss.CONST_G;
 
 function computeC(msg, X) { 
     const inner = msg + X.getStr(10).slice(2);
-    const cString = utilityService.getHashOfValue(inner);
-    const c = mcl.hashToFr(cString);
+    const intValue = utilityService.getHashOfValue(inner);
+    return mclService.generateFr(intValue);
 }
 
 async function verifySignature(payload) {
