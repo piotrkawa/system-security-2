@@ -30,7 +30,6 @@ async function blsss(address) {
 
     let responseData = await axios.post(address + '/protocols/blsss/verify', body);
     responseData = responseData.data;
-    console.log(responseData);
     assert(responseData.valid);
 }
 

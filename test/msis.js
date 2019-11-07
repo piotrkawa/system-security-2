@@ -10,7 +10,6 @@ const msisService = require('../src/services/msisService');
 async function msis(address) {
     await mcl.init(CONFIG['CURVE_TYPE']);
 
-
     const g = msisService.getGroupGenerator();
     const a = mclService.getRandomScalar();
     const A = mcl.mul(g, a);

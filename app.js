@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const OpenApiValidator = require('express-openapi-validator').OpenApiValidator;
 
 const app = express();
-const PORT = 8080;
+const PORT = 8443;
 var argv = (process.argv.slice(2));
 let server;
 let communicate;

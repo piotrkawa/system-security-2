@@ -1,11 +1,15 @@
 const axios = require('axios');
-
+const https = require('https');
+const fs = require('fs');
 const SIS = require('./sis');
 const OIS = require('./ois');
 const MSIS = require('./msis');
 const SSS = require('./sss');
 const BLSSS = require('./blsss');
+const GJSS = require('./gjss');
 
+
+var argv = (process.argv.slice(2));
 const ENDPOINTS_CONFIG = require('../endpointsConfig');
 
 const MY_PROTOCOLS = {
@@ -13,11 +17,20 @@ const MY_PROTOCOLS = {
     'ois': OIS.ois,
     'msis': MSIS.msis,
     'sss': SSS.sss,
-    'blsss': BLSSS.blsss
+    'blsss': BLSSS.blsss,
+    // 'gjss': GJSS.gjss
 };
+const PERSON = 'rafal_rothenberger';
+const address = ENDPOINTS_CONFIG[PERSON].address;
 
-const { address, port } = ENDPOINTS_CONFIG['localhost'];
-const ROOT = `http://${address}:${port}`
+let url = '';
+
+if (argv.includes('--https')) {
+    let port = ENDPOINTS_CONFIG['httpsPort'];
+    url = `https://${address}:${port}`
+} else {
+    url = `http://${address}`
+}
 
 async function test () {
     performAvailableProtocols()
@@ -25,18 +38,18 @@ async function test () {
 
 async function testManually() {
     // GJSS.gjss(ROOT);
-    SSS.sss(ROOT);
+    SSS.sss(url);
 }
 
 async function performAvailableProtocols() {
-    const response = await axios.get(ROOT + '/protocols');
+    const response = await axios.get(url + '/protocols');
     const availableProtocols = response.data.schemas;
     console.log(`Available protocols: ${availableProtocols}`);
     for (protocol of availableProtocols) {
         if (MY_PROTOCOLS.hasOwnProperty(protocol)) {
-            const func = MY_PROTOCOLS[protocol]
-            console.log(`Performing ${protocol}`)
-            await func(ROOT)
+            const func = MY_PROTOCOLS[protocol];
+            console.log(`Performing ${protocol}`);
+            await func(url);
         } else {
             console.log(`${protocol} not supported`)
         }

@@ -17,7 +17,7 @@ async function verifyCommitment (session, SRequest) {
 
     const g = getGroupGenerator();
 
-    const gHat = mcl.hashAndMapToG2(X.serializeToHexStr() + c.serializeToHexStr());
+    const gHat = mcl.hashAndMapToG2(X.getStr(10).slice(2) + c.getStr(10));
     const XAc = mcl.add(X, mcl.mul(A, c)); 
     
     const leftSide = mcl.pairing(g, S)

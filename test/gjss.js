@@ -7,7 +7,7 @@ const mclService = require('../src/services/mclService');
 const utilityService = require('../src/services/utilityService');
 const gjssService = require('../src/services/gjssService');
 
-const s_k = CONFIG.gjss.s_k; // TODO: can be prettier
+const n_r = CONFIG.gjss.n_r; // TODO: can be prettier
 
 
 async function gjss(address) { 
@@ -18,8 +18,8 @@ async function gjss(address) {
     const a = mclService.getRandomScalar();
     const A = mcl.mul(g, a);
 
-    const r = utilityService.getRandomBits(s_k);
-    const h = utilityService.getHashOfValue(); // TODO: hash
+    const r = utilityService.getRandomBits(n_r);
+    const h = utilityService.getHashOfValue(msg + r); // TODO: hash
     const z = mcl.mul(h, a);
 
     const k = mclService.getRandomScalar();

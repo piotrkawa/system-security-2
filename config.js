@@ -1,8 +1,10 @@
 const mcl = require('mcl-wasm');
 
 const CONFIG = {
+    'HTTPS_PORT': 8443,
+    'HTTP_PORT': 8080,
     'CURVE_TYPE': mcl.BLS12_381,
-    'CURRENTLY_SUPPORTED_PROTOCOLS': ['sis', 'ois', 'sss', 'msis'],
+    'CURRENTLY_SUPPORTED_PROTOCOLS': ['sis', 'ois', 'sss', 'msis', 'blsss', 'gjss'],
     'r': '0x73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001',
     sis: {
         CONST_G: { 
