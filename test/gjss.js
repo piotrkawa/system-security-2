@@ -19,7 +19,7 @@ async function gjss(address) {
     const A = mcl.mul(g, a);
 
     const r = utilityService.getRandomBits(n_r);
-    const h = utilityService.getHashOfValue(msg + r); // TODO: hash
+    const h = mclService.generateFr(utilityService.getHashOfValue(msg + r)); // TODO: hash
     const z = mcl.mul(h, a);
 
     const k = mclService.getRandomScalar();
@@ -27,7 +27,7 @@ async function gjss(address) {
     const u = mcl.mul(g, k);
     const v = mcl.mul(h, k);
 
-    const c = gjssService.hashPrim(g, h, A, z, u, v); // TODO: hash
+    const c = mclService.generateFr(gjssService.hashPrim(g, h, A, z, u, v)); // TODO: hash
 
     const cx = mcl.mul(c, a);
     const s =  mcl.add(k, cx);
@@ -38,7 +38,7 @@ async function gjss(address) {
             A: A.getStr(10).slice(2),
             sigma: {
                 z: z.getStr(),
-                r: r.getStr(),
+                r: r,
                 s: s.getStr(),
                 c: c.getStr()
             },
@@ -48,7 +48,7 @@ async function gjss(address) {
 
     let responseData = await axios.post(address + '/protocols/gjss/verify', body);
     responseData = responseData.data;
-    assert(responseData.verified);
+    assert(responseData.valid);
 }
 
 

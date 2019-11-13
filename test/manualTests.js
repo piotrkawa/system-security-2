@@ -17,10 +17,11 @@ const MY_PROTOCOLS = {
     'ois': OIS.ois,
     'msis': MSIS.msis,
     'sss': SSS.sss,
-    'blsss': BLSSS.blsss,
-    // 'gjss': GJSS.gjss
+    // 'blsss': BLSSS.blsss,
+    'gjss': GJSS.gjss
 };
-const PERSON = 'rafal_rothenberger';
+
+const PERSON = 'localhost';
 const address = ENDPOINTS_CONFIG[PERSON].address;
 
 let url = '';
@@ -29,16 +30,18 @@ if (argv.includes('--https')) {
     let port = ENDPOINTS_CONFIG['httpsPort'];
     url = `https://${address}:${port}`
 } else {
-    url = `http://${address}`
+    let port = 8080;
+    url = `http://${address}:${port}`
 }
 
 async function test () {
-    performAvailableProtocols()
+    // performAvailableProtocols()
+    testManually()
 }
 
 async function testManually() {
     // GJSS.gjss(ROOT);
-    SSS.sss(url);
+    GJSS.gjss(url);
 }
 
 async function performAvailableProtocols() {

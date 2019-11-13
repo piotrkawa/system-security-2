@@ -12,9 +12,9 @@ function getHashOfValue(value) {
     const hash = crypto.createHash('sha3-512');
     hash.update(value);
     const digestedHash = hash.digest('hex');
-    const r = BigInt(CONFIG.r);
+    const q = BigInt(CONFIG.r);
     const hashInt = BigInt('0x' + digestedHash);
-    return (hashInt % r).toString();
+    return (hashInt % q).toString();
 }
 
 

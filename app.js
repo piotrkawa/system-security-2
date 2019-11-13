@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const OpenApiValidator = require('express-openapi-validator').OpenApiValidator;
 
 const app = express();
-const PORT = 8443;
+
 var argv = (process.argv.slice(2));
 let server;
 let communicate;
@@ -28,12 +28,16 @@ app.use((err, req, res, next) => {
     }); 
 });
 
+
+let PORT = 8443;
+
 if (argv.includes('--https')) {
     const https = require('https');
     const credentials = require('./credentials');
     server = https.createServer(credentials, app);
     communicate = `HTTPS Server listening on port ${PORT}!`;
 } else {
+    PORT = 8080;
     const http = require('http');
     server = http.createServer(app);
     communicate = `HTTP Server listening on port ${PORT}!`;

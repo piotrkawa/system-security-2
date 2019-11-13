@@ -11,17 +11,17 @@ async function verifySignature(payload) {
 
     const s = mclService.generateFr(sigmaPayload.s);
     const c = mclService.generateFr(sigmaPayload.c);
-    const r = mclService.generateFr(sigmaPayload.r);
+    const r = sigmaPayload.r;
     const z = mclService.generateFr(sigmaPayload.z);
     const A = mclService.generateG1(payload.A);
     const msg = payload.msg;
 
     const g = getGroupGenerator();
 
-    const h = utilityService.getHashOfValue(msg + r);
+    const h = mclService.generateFr(utilityService.getHashOfValue(msg + r));
     
     const gs = mcl.mul(g, s);
-    const yc = mcl.mul(y, c);
+    const yc = mcl.mul(A, c);
     const u = mcl.sub(gs, yc);
 
     const hs = mcl.mul(h, s);
@@ -30,6 +30,7 @@ async function verifySignature(payload) {
 
 
     let cPrim = hashPrim(g, h, A, z, u, v); // map it to Fr
+    cPrim = mclService.generateFr(cPrim);
     
     return cPrim.getStr() == c.getStr(); 
 }
