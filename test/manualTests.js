@@ -17,7 +17,7 @@ const MY_PROTOCOLS = {
     'ois': OIS.ois,
     'msis': MSIS.msis,
     'sss': SSS.sss,
-    // 'blsss': BLSSS.blsss,
+    'blsss': BLSSS.blsss,
     'gjss': GJSS.gjss
 };
 
@@ -35,13 +35,14 @@ if (argv.includes('--https')) {
 }
 
 async function test () {
-    // performAvailableProtocols()
-    testManually()
+    performAvailableProtocols()
+    // testManually()
 }
 
 async function testManually() {
     // GJSS.gjss(ROOT);
-    GJSS.gjss(url);
+    MSIS.msis(url);
+    // GJSS.gjss(url);
 }
 
 async function performAvailableProtocols() {

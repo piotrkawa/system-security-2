@@ -31,7 +31,7 @@ async function msis(address) {
     const c = new mcl.Fr();
     c.setStr(responseData.payload.c);
 
-    const gHat = mcl.hashAndMapToG2(X.serializeToHexStr() + c.serializeToHexStr());
+    const gHat = mcl.hashAndMapToG2(X.getStr(10).slice(2) + c.getStr(10));
 
     const exponent = mcl.add(x, mcl.mul(a, c));
     const S = mcl.mul(gHat, exponent);
