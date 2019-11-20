@@ -18,7 +18,7 @@ router.post('/init', async function (req, res) {
     
     const response = {'session_token': sessionToken, 'payload': {'c': c}};
     LOGGER.log({message: `[OIS Init] Reponse: ${JSON.stringify(response)}`});
-    res.json(response);
+    res.send(response);
 })
 
 
@@ -49,7 +49,7 @@ router.post('/verify', async function (req, res) {
     try {
         const isVerified = await oisService.verifyCommitment(session.dataValues, s1, s2);
         LOGGER.log({message: `[OIS Verify] Verified: ${isVerified}`});
-        res.json({'verified': isVerified});
+        res.send({'verified': isVerified});
     } catch (e) {
         LOGGER.log({message: `[OIS Verify] Verification not successful`});
         res.sendStatus(400);

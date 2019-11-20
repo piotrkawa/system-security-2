@@ -11,22 +11,29 @@ let communicate;
 
 app.use(morgan('common'))
 app.use(bodyParser.json());
-app.use(require('./src/api'));
+app.use(require('./src/api/'));
 app.use(express.json());
 
 
-new OpenApiValidator({
-    apiSpec: require('./openapi/openapi.json'),
-    validateRequests: true,
-    validateResponses: true,
-}).install(app);
+// new OpenApiValidator({
+//     apiSpec: require('./openapi/openapi.json'),
+//     validateRequests: true,
+//     validateResponses: true,
+// }).install(app);
 
-app.use((err, req, res, next) => {
-    res.status(err.status || 500).json({
-        message: err.message,
-        errors: err.errors,
-    }); 
-});
+// app.use((err, req, res, next) => {
+//     res.status(err.status || 500).json({
+//         message: err.message,
+//         errors: err.errors,
+//     }); 
+// });
+
+
+// app.use(function (req, res, next) {
+//     console.log('Time:', Date.now())
+//     next()
+//   })
+
 
 
 let PORT = 8443;
@@ -45,7 +52,6 @@ if (argv.includes('--https')) {
 
 server.listen(PORT, function() {
     console.log(communicate)
-    app.emit('app_started');
 });
 
 module.exports = app

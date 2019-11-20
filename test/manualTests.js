@@ -34,15 +34,15 @@ if (argv.includes('--https')) {
     url = `http://${address}:${port}`
 }
 
-async function test () {
-    performAvailableProtocols()
-    // testManually()
+async function test (url) {
+    // performAvailableProtocols()
+    testManually(url)
 }
 
-async function testManually() {
-    // GJSS.gjss(ROOT);
-    MSIS.msis(url);
-    // GJSS.gjss(url);
+async function testManually(url) {
+    SSS.sss(url);
+    // const response = await axios.get(url + '/salsa/protocols');
+    // console.log(response)
 }
 
 async function performAvailableProtocols() {
@@ -60,4 +60,4 @@ async function performAvailableProtocols() {
     }
 }
 
-test()
+test(url)

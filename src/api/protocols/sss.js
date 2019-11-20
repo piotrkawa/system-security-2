@@ -24,7 +24,7 @@ router.post('/verify', async function (req, res) {
     try {
         const isValid = await sssService.verifySignature(payload);
         LOGGER.log({message: `[SSS Verify] Valid: ${isValid}`});
-        res.json({'valid': isValid});
+        res.send({'valid': isValid});
     } catch (e) {
         LOGGER.log({message: `[SSS Verify] Validation not successful`});
         res.sendStatus(403);

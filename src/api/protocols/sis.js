@@ -27,7 +27,7 @@ router.post('/init', async function (req, res) {
 
     const response = {'session_token': sessionToken, 'payload': {'c': c}};
     LOGGER.log({message: `[SIS Init] Reponse: ${JSON.stringify(response)}`});
-    res.json(response);
+    res.send(response);
     /*
     {
         "session_token": "string",

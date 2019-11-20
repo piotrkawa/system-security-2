@@ -9,7 +9,7 @@ const sssService = require('../src/services/sssService');
 
 async function sss(address) {
     await mcl.init(CONFIG['CURVE_TYPE']);
-
+    
     const msg = "MY MESSAGE";
 
     const g = sssService.getGroupGenerator();
@@ -29,10 +29,11 @@ async function sss(address) {
             msg: msg
         }
     };
-
-    let responseData = await axios.post(address + '/protocols/sss/verify', body);
+    let responseData = await axios.post(address + '/salsa/protocols/sss/verify', body);
+    // let responseData = await axios.post(address + '/salsa/protocols/sss/verify', body);
     responseData = responseData.data;
     assert(responseData.valid);
+    console.log(responseData.data);
 }
 
 

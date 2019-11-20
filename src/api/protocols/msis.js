@@ -19,7 +19,7 @@ router.post('/init', async function (req, res) {
     payload['c'] = c;
     const sessionToken = utilityService.generateToken();
     await dbService.saveSession(sessionToken, payload);
-    res.json({'session_token': sessionToken, 'payload': {'c': c}});
+    res.send({'session_token': sessionToken, 'payload': {'c': c}});
     /*
     {
         "session_token": "string",
@@ -53,7 +53,7 @@ router.post('/verify', async function (req, res) {
 
     try {
         const isVerified = await msisService.verifyCommitment(session.dataValues, S);
-        res.json({'verified': isVerified})
+        res.send({'verified': isVerified})
     } catch (e) {
         console.log(e);
         res.sendStatus(403);

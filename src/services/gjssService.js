@@ -29,13 +29,13 @@ async function verifySignature(payload) {
     const v = mcl.sub(hs, zc);
 
 
-    let cPrim = hashPrim(g, h, A, z, u, v); // map it to Fr
+    let cPrim = hashPrim(g, h, A, z, u, v);
     cPrim = mclService.generateFr(cPrim);
     
     return cPrim.getStr() == c.getStr(); 
 }
 
-function hashPrim(...hashArguments) { // string
+function hashPrim(...hashArguments) {
     let argument = "";
     for (arg of hashArguments) {
         argument += hashArguments;

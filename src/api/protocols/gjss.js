@@ -28,7 +28,7 @@ router.post('/verify', async function (req, res) {
     try {
         const isValid = await gjssService.verifySignature(payload);
         LOGGER.log({message: `[GJSS Verify] Valid: ${isValid}`});
-        res.json({'valid': isValid});
+        res.send({'valid': isValid});
     } catch (e) {
         LOGGER.log({message: `[GJSS Verify] Validation not successful`});
         res.sendStatus(403);
