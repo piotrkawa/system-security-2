@@ -7,7 +7,7 @@ const encryptDecryptMiddleware = async function(req, res, next){
     // TODO: encrypt
 
     res.send = function(data) {
-        if (typeof data === 'string') { // if data is string - serialize to json
+        if (typeof data === 'string') {
             data = JSON.parse(data);
         }
         // TODO: decrypt

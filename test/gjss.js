@@ -10,7 +10,7 @@ const gjssService = require('../src/services/gjssService');
 const n_r = CONFIG.gjss.n_r; // TODO: can be prettier
 
 
-async function gjss(address) { 
+async function gjss(address, prefix) { 
     await mcl.init(CONFIG['CURVE_TYPE']);
     const msg = 'MY MESSAGE';
 
@@ -46,7 +46,7 @@ async function gjss(address) {
         }
     };
 
-    let responseData = await axios.post(address + '/protocols/gjss/verify', body);
+    let responseData = await axios.post(`${address}/protocols/gjss/verify`, body);
     responseData = responseData.data;
     assert(responseData.valid);
 }

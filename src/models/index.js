@@ -33,6 +33,4 @@ Session.init({
 
 Session.sync({ force: true });
 
-module.exports = {
-  Session
-}
+module.exports = { Session }

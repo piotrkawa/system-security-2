@@ -1,17 +1,16 @@
 const axios = require('axios');
-const https = require('https');
-const fs = require('fs');
+
 const SIS = require('./sis');
 const OIS = require('./ois');
 const MSIS = require('./msis');
 const SSS = require('./sss');
 const BLSSS = require('./blsss');
 const GJSS = require('./gjss');
-
-
-var argv = (process.argv.slice(2));
 const ENDPOINTS_CONFIG = require('../endpointsConfig');
 
+
+const PERSON = 'localhost';
+const address = ENDPOINTS_CONFIG[PERSON].address;
 const MY_PROTOCOLS = {
     'sis': SIS.sis,
     'ois': OIS.ois,
@@ -21,22 +20,30 @@ const MY_PROTOCOLS = {
     'gjss': GJSS.gjss
 };
 
-const PERSON = 'localhost';
-const address = ENDPOINTS_CONFIG[PERSON].address;
 
-let url = '';
+function getURL() {
+    const argv = (process.argv.slice(2)); 
 
-if (argv.includes('--https')) {
-    let port = ENDPOINTS_CONFIG['httpsPort'];
-    url = `https://${address}:${port}`
-} else {
     let port = 8080;
-    url = `http://${address}:${port}`
+    let url = `http://${address}:${port}`
+    
+    if (argv.includes('--https')) {
+        port = ENDPOINTS_CONFIG['httpsPort'];
+        url = `https://${address}:${port}`
+    }
+    
+    if (argv.includes('--salsa')) {
+        url += '/salsa';
+    } else if (argv.includes('--chacha')) {
+        url += '/chacha';
+    }
+    
+    return url;
 }
 
 async function test (url) {
-    // performAvailableProtocols()
-    testManually(url)
+    // performAvailableProtocols();
+    testManually(url);
 }
 
 async function testManually(url) {
@@ -51,13 +58,15 @@ async function performAvailableProtocols() {
     console.log(`Available protocols: ${availableProtocols}`);
     for (protocol of availableProtocols) {
         if (MY_PROTOCOLS.hasOwnProperty(protocol)) {
-            const func = MY_PROTOCOLS[protocol];
+            const protocolFunction = MY_PROTOCOLS[protocol];
             console.log(`Performing ${protocol}`);
-            await func(url);
+            await protocolFunction(url, PREFIX);
         } else {
             console.log(`${protocol} not supported`)
         }
     }
 }
 
-test(url)
+let url = getURL();
+
+test(url);

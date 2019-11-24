@@ -7,7 +7,7 @@ const mclService = require('../src/services/mclService');
 const sssService = require('../src/services/sssService');
 
 
-async function sss(address) {
+async function sss(address, prefix='') {
     await mcl.init(CONFIG['CURVE_TYPE']);
     
     const msg = "MY MESSAGE";
@@ -29,8 +29,7 @@ async function sss(address) {
             msg: msg
         }
     };
-    let responseData = await axios.post(address + '/salsa/protocols/sss/verify', body);
-    // let responseData = await axios.post(address + '/salsa/protocols/sss/verify', body);
+    let responseData = await axios.post(`${address}/protocols/sss/verify`, body);
     responseData = responseData.data;
     assert(responseData.valid);
     console.log(responseData.data);
