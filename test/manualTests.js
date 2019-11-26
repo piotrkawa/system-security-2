@@ -7,7 +7,7 @@ const SSS = require('./sss');
 const BLSSS = require('./blsss');
 const GJSS = require('./gjss');
 const ENDPOINTS_CONFIG = require('../endpointsConfig');
-
+const EncryptionType = require('./requestCryptographyService').EncryptionType;
 
 const PERSON = 'localhost';
 const address = ENDPOINTS_CONFIG[PERSON].address;
@@ -19,7 +19,7 @@ const MY_PROTOCOLS = {
     'blsss': BLSSS.blsss,
     'gjss': GJSS.gjss
 };
-
+let encryptionType = EncryptionType.none;
 
 function getURL() {
     const argv = (process.argv.slice(2)); 
@@ -34,20 +34,22 @@ function getURL() {
     
     if (argv.includes('--salsa')) {
         url += '/salsa';
+        encryptionType = EncryptionType.salsa;
     } else if (argv.includes('--chacha')) {
         url += '/chacha';
+        encryptionType = EncryptionType.chacha;
     }
     
     return url;
 }
 
-async function test (url) {
+async function test (url, encryptionType) {
     // performAvailableProtocols();
-    testManually(url);
+    testManually(url, encryptionType);
 }
 
-async function testManually(url) {
-    SSS.sss(url);
+async function testManually(url, encryptionType) {
+    SSS.sss(url, encryptionType);
     // const response = await axios.get(url + '/salsa/protocols');
     // console.log(response)
 }
@@ -60,7 +62,7 @@ async function performAvailableProtocols() {
         if (MY_PROTOCOLS.hasOwnProperty(protocol)) {
             const protocolFunction = MY_PROTOCOLS[protocol];
             console.log(`Performing ${protocol}`);
-            await protocolFunction(url, PREFIX);
+            await protocolFunction(url, encryptionType);
         } else {
             console.log(`${protocol} not supported`)
         }
@@ -69,4 +71,4 @@ async function performAvailableProtocols() {
 
 let url = getURL();
 
-test(url);
+test(url, encryptionType);

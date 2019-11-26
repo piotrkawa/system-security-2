@@ -1,9 +1,11 @@
 const _sodium = require('libsodium-wrappers');
+const fs = require('fs');
+const te = require('text-encoding');
+const td = require('text-decoding');
+const { CONFIG } = require('../../config');
 
-const { CONFIG }= require('../../config');
 
-
-function encryptSalsa(data) {
+async function encryptSalsa(data) {
     await _sodium.ready;
     const sodium = _sodium;
     let encoder = new te.TextEncoder('utf-8');
@@ -20,23 +22,23 @@ function encryptSalsa(data) {
     return data;
 }
 
-function decryptSalsa(data) {
+async function decryptSalsa(data) {
     await _sodium.ready;
     const sodium = _sodium;
-    let decoder = new td.TextDecoder('utf-8');
+    const decoder = new td.TextDecoder('utf-8');
     const binKey = fs.readFileSync(CONFIG.SALSA_KEY_PATH);
-    let key = sodium.from_hex(binKey.toString('hex'));
-    let nonce = sodium.from_base64(data.nonce, sodium.base64_variants.ORIGINAL);
-    let ciphertext = sodium.from_base64(data.ciphertext, sodium.base64_variants.ORIGINAL);
+    const key = sodium.from_hex(binKey.toString('hex'));
+    const nonce = sodium.from_base64(data.nonce, sodium.base64_variants.ORIGINAL);
+    const ciphertext = sodium.from_base64(data.ciphertext, sodium.base64_variants.ORIGINAL);
     data = sodium.crypto_secretbox_open_easy(ciphertext, nonce, key);
     return JSON.parse(decoder.decode(data));
 }
 
-function encryptChaCha(data) {
+async function encryptChaCha(data) {
     throw new Error('Not implemented!');
 }
 
-function decryptChaCha(data) {
+async function decryptChaCha(data) {
     throw new Error('Not implemented!');
 }
 

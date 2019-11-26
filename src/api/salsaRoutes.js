@@ -1,31 +1,22 @@
-const express = require('express')
-const router = express.Router()
-const standardRoutes = require('./routes')
+const express = require('express');
+const router = express.Router();
+const mung = require('express-mung');
 
-const encryptDecryptMiddleware = async function(req, res, next){
-    let oldSend = res.send;
-    // TODO: encrypt
+const cryptographyService = require('../services/cryptographyService');
+const standardRoutes = require('./routes');
 
-    res.send = function(data) {
-        if (typeof data === 'string') { // if data is string - serialize to json
-            data = JSON.parse(data);
-        }
-        // TODO: decrypt
-        const ciphertext = null;
-        const nonce = null;
 
-        const oldData = data;
-        data = {
-            ciphertext: ciphertext,
-            nonce: nonce
-        };
-
-        data = JSON.stringify(data);
-        oldSend.apply(res, arguments);
+async function decryptRequest(req, res, next) {
+    if (req.body !== {}) {
+        req.body = await cryptographyService.decryptSalsa(req.body);
     }
     next();
-};
+}
 
-router.use(encryptDecryptMiddleware, standardRoutes);
+async function encryptResponse(body, req, res) {
+    return await cryptographyService.encryptSalsa(body);
+}
+
+router.use(decryptRequest, mung.jsonAsync(encryptResponse), standardRoutes);
 
 module.exports = router
