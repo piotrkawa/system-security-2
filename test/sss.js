@@ -1,13 +1,12 @@
-const axios = require('axios');
 const assert = require('assert');
 const mcl = require('mcl-wasm');
 
 const { CONFIG } = require('../config');
 const mclService = require('../src/services/mclService');
 const sssService = require('../src/services/sssService');
-const reqService = require('./requestCryptographyService');
 
-async function sss(address, encryptionType) {
+
+async function sss(address, sendRequest) {
     await mcl.init(CONFIG['CURVE_TYPE']);
     
     const msg = "MY MESSAGE";
@@ -29,12 +28,10 @@ async function sss(address, encryptionType) {
             msg: msg
         }
     };
-    body = await reqService.encryptIfRequired(encryptionType, body);
-    let response = await axios.post(`${address}/protocols/sss/verify`, body);
-    responseData = await reqService.decryptIfRequired(encryptionType, response.data);
-    // responseData = responseData.data;
+    let response = await sendRequest(`${address}/protocols/sss/verify`, body);
+    let responseData = response.data;
     assert(responseData.valid);
-    console.log(responseData.data);
+    console.log(responseData);
 }
 
 

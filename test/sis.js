@@ -8,7 +8,7 @@ const sisService = require('../src/services/sisService');
 
 
 
-async function sis(address) {
+async function sis(address, sendRequest) {
     await mcl.init(CONFIG['CURVE_TYPE']);
 
     const g = sisService.getGroupGenerator();
@@ -26,7 +26,7 @@ async function sis(address) {
         }
     };
 
-    let response = await axios.post(`${address}/protocols/sis/init`, body);
+    let response = await sendRequest(`${address}/protocols/sis/init`, body);
     const sessionToken = response.data.session_token;
     const c = new mcl.Fr();
     c.setStr(response.data.payload.c);
@@ -42,7 +42,7 @@ async function sis(address) {
         }
     };
 
-    response = await axios.post(`${address}/protocols/sis/verify`, body);
+    response = await sendRequest(`${address}/protocols/sis/verify`, body);
     assert(response.data.verified)
 }
 

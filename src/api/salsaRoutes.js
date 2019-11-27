@@ -7,7 +7,7 @@ const standardRoutes = require('./routes');
 
 
 async function decryptRequest(req, res, next) {
-    if (req.body !== {}) {
+    if (req.method !== 'GET' && Object.keys(req.body).length > 0) { // body is not empty
         req.body = await cryptographyService.decryptSalsa(req.body);
     }
     next();

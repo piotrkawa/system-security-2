@@ -7,7 +7,7 @@ const mclService = require('../src/services/mclService');
 const msisService = require('../src/services/msisService');
 
 
-async function msis(address) {
+async function msis(address, sendRequest) {
     await mcl.init(CONFIG['CURVE_TYPE']);
 
     const g = msisService.getGroupGenerator();
@@ -25,8 +25,8 @@ async function msis(address) {
         }
     };
 
-    let responseData = await axios.post(address + '/protocols/msis/init', body);
-    responseData = responseData.data;
+    let response = await sendRequest(`${address}/protocols/msis/init`, body);
+    let responseData = response.data;
     const session_token = responseData.session_token; 
     const c = new mcl.Fr();
     c.setStr(responseData.payload.c);
@@ -44,8 +44,8 @@ async function msis(address) {
         }
     };
 
-    resp = await axios.post(address + '/protocols/msis/verify', body);
-    responseData = resp.data
+    response = await sendRequest(`${address}/protocols/msis/verify`, body);
+    responseData = response.data
     assert(responseData.verified);
 }
 

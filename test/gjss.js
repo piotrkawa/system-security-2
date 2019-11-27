@@ -1,4 +1,3 @@
-const axios = require('axios');
 const assert = require('assert');
 const mcl = require('mcl-wasm');
 
@@ -10,7 +9,7 @@ const gjssService = require('../src/services/gjssService');
 const n_r = CONFIG.gjss.n_r; // TODO: can be prettier
 
 
-async function gjss(address, prefix) { 
+async function gjss(address, sendRequest) { 
     await mcl.init(CONFIG['CURVE_TYPE']);
     const msg = 'MY MESSAGE';
 
@@ -46,8 +45,8 @@ async function gjss(address, prefix) {
         }
     };
 
-    let responseData = await axios.post(`${address}/protocols/gjss/verify`, body);
-    responseData = responseData.data;
+    let response = await sendRequest(`${address}/protocols/gjss/verify`, body);
+    responseData = response.data;
     assert(responseData.valid);
 }
 

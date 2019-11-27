@@ -7,7 +7,7 @@ const SSS = require('./sss');
 const BLSSS = require('./blsss');
 const GJSS = require('./gjss');
 const ENDPOINTS_CONFIG = require('../endpointsConfig');
-const EncryptionType = require('./requestCryptographyService').EncryptionType;
+const reqService = require('./requestCryptographyService');
 
 const PERSON = 'localhost';
 const address = ENDPOINTS_CONFIG[PERSON].address;
@@ -19,7 +19,7 @@ const MY_PROTOCOLS = {
     'blsss': BLSSS.blsss,
     'gjss': GJSS.gjss
 };
-let encryptionType = EncryptionType.none;
+let encryptionType = reqService.EncryptionType.none;
 
 function getURL() {
     const argv = (process.argv.slice(2)); 
@@ -34,35 +34,38 @@ function getURL() {
     
     if (argv.includes('--salsa')) {
         url += '/salsa';
-        encryptionType = EncryptionType.salsa;
+        encryptionType = reqService.EncryptionType.salsa;
     } else if (argv.includes('--chacha')) {
         url += '/chacha';
-        encryptionType = EncryptionType.chacha;
+        encryptionType = reqService.EncryptionType.chacha;
     }
     
     return url;
 }
 
 async function test (url, encryptionType) {
-    // performAvailableProtocols();
-    testManually(url, encryptionType);
+    const sendPOSTRequest = reqService.getRequestFunction(encryptionType);
+    const sendGETRequest = reqService.getRequestFunction(encryptionType, 'GET');
+    performAvailableProtocols(sendGETRequest, sendPOSTRequest);
+    // testManually(url, encryptionType);
 }
 
 async function testManually(url, encryptionType) {
-    SSS.sss(url, encryptionType);
+    
+    // SSS.sss(url, sendRequest);
     // const response = await axios.get(url + '/salsa/protocols');
     // console.log(response)
 }
 
-async function performAvailableProtocols() {
-    const response = await axios.get(url + '/protocols');
+async function performAvailableProtocols(sendGETRequest, sendPOSTRequest) {
+    const response = await sendGETRequest(`${url}/protocols`);
     const availableProtocols = response.data.schemas;
     console.log(`Available protocols: ${availableProtocols}`);
     for (protocol of availableProtocols) {
         if (MY_PROTOCOLS.hasOwnProperty(protocol)) {
             const protocolFunction = MY_PROTOCOLS[protocol];
             console.log(`Performing ${protocol}`);
-            await protocolFunction(url, encryptionType);
+            await protocolFunction(url, sendPOSTRequest);
         } else {
             console.log(`${protocol} not supported`)
         }

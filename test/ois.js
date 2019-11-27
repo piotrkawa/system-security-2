@@ -7,7 +7,7 @@ const mclService = require('../src/services/mclService');
 const oisService = require('../src/services/oisService');
 
 
-async function ois(address) { 
+async function ois(address, sendRequest) { 
     await mcl.init(CONFIG['CURVE_TYPE']);
 
     const { g1, g2 } = oisService.getGroupGenerators();
@@ -31,7 +31,7 @@ async function ois(address) {
         }
     };
 
-    let responseData = await axios.post(address + '/protocols/ois/init', body);
+    let responseData = await sendRequest(`${address}/protocols/ois/init`, body);
     responseData = responseData.data;
     
     const session_token = responseData.session_token; 
@@ -53,8 +53,8 @@ async function ois(address) {
         }
     };
 
-    resp = await axios.post(address + '/protocols/ois/verify', body);
-    responseData = resp.data
+    response = await sendRequest(`${address}/protocols/ois/verify`, body);
+    responseData = response.data;
     assert(responseData.verified);
 }
 
