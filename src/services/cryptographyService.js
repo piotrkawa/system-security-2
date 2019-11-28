@@ -1,7 +1,10 @@
+const chacha = require('chacha');
+const crypto = require('crypto');
 const _sodium = require('libsodium-wrappers');
 const fs = require('fs');
 const te = require('text-encoding');
 const td = require('text-decoding');
+
 const { CONFIG } = require('../../config');
 
 
@@ -35,11 +38,30 @@ async function decryptSalsa(data) {
 }
 
 async function encryptChaCha(data) {
-    throw new Error('Not implemented!');
+    const nonce = crypto.randomBytes(12);
+    const binKey = fs.readFileSync(CONFIG.CHACHA_KEY_PATH, null);
+    const chachaCipher = chacha.createCipher(binKey, nonce);
+    data = Buffer.from(JSON.stringify(data), 'utf8');
+    const ciphertext = chachaCipher.update(data, 'utf8');
+    await chachaCipher.final();
+    const tag = chachaCipher.getAuthTag();
+    data = {
+        'ciphertext': ciphertext.toString('base64'),
+        'nonce': nonce.toString('base64'),
+        'tag': tag.toString('base64')
+    }
+    return data;
 }
 
 async function decryptChaCha(data) {
-    throw new Error('Not implemented!');
+    const binKey = fs.readFileSync(CONFIG.CHACHA_KEY_PATH, null);
+    let nonce = Buffer.from(data.nonce, 'base64');
+    let tag = Buffer.from(data.tag, 'base64');
+    let ciphertext = Buffer.from(data.ciphertext, 'base64');
+    const chcachaDecipher = chacha.createDecipher(binKey, nonce);
+    chcachaDecipher.setAuthTag(tag);
+    data = chcachaDecipher.update(ciphertext, 'utf8');
+    return JSON.parse(data.toString('ascii'));
 }
 
 module.exports = { encryptSalsa, decryptSalsa, encryptChaCha, decryptChaCha }

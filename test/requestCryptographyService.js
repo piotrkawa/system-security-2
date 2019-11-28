@@ -55,14 +55,12 @@ async function sendGET (url) {
 }
 
 async function sendGETSalsa (url) {
-    // body = await cryptographyService.encryptSalsa(body);
     let response = await axios.get(url);
     response.data = await cryptographyService.decryptSalsa(response.data);
     return response
 }
 
 async function sendGETChaCha (url) {
-    // body = await cryptographyService.encryptChaCha(body);
     let response = await axios.get(url);
     response.data = await cryptographyService.decryptChaCha(response.data);
     return response
