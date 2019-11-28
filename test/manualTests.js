@@ -9,7 +9,7 @@ const GJSS = require('./gjss');
 const ENDPOINTS_CONFIG = require('../endpointsConfig');
 const reqService = require('./requestCryptographyService');
 
-const PERSON = 'localhost';
+const PERSON = 'lukasz_klekowski';
 const address = ENDPOINTS_CONFIG[PERSON].address;
 const MY_PROTOCOLS = {
     'sis': SIS.sis,
@@ -25,7 +25,7 @@ function getURL() {
     const argv = (process.argv.slice(2)); 
 
     let port = 8080;
-    let url = `http://${address}:${port}`
+    let url = `http://${address}`//:${port}`
     
     if (argv.includes('--https')) {
         port = ENDPOINTS_CONFIG['httpsPort'];
@@ -47,18 +47,18 @@ async function test (url, encryptionType) {
     const sendPOSTRequest = reqService.getRequestFunction(encryptionType);
     const sendGETRequest = reqService.getRequestFunction(encryptionType, 'GET');
     performAvailableProtocols(sendGETRequest, sendPOSTRequest);
-    // testManually(url, encryptionType);
+    // testManually(url, sendPOSTRequest);
 }
 
-async function testManually(url, encryptionType) {
-    
-    // SSS.sss(url, sendRequest);
+async function testManually(url, sendPOSTRequest) {
+    GJSS.gjss(url, sendPOSTRequest);
     // const response = await axios.get(url + '/salsa/protocols');
     // console.log(response)
 }
 
 async function performAvailableProtocols(sendGETRequest, sendPOSTRequest) {
-    const response = await sendGETRequest(`${url}/protocols`);
+    a = `${url}/protocols`
+    const response = await sendGETRequest(a);
     const availableProtocols = response.data.schemas;
     console.log(`Available protocols: ${availableProtocols}`);
     for (protocol of availableProtocols) {

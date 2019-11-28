@@ -18,7 +18,7 @@ async function gjss(address, sendRequest) {
     const A = mcl.mul(g, a);
 
     const r = utilityService.getRandomBits(n_r);
-    const h = mclService.generateFr(utilityService.getHashOfValue(msg + r)); // TODO: hash
+    const h = mcl.hashAndMapToG1(msg + r);
     const z = mcl.mul(h, a);
 
     const k = mclService.getRandomScalar();
@@ -26,9 +26,9 @@ async function gjss(address, sendRequest) {
     const u = mcl.mul(g, k);
     const v = mcl.mul(h, k);
 
-    const c = mclService.generateFr(gjssService.hashPrim(g, h, A, z, u, v)); // TODO: hash
+    const c = mclService.generateFr(gjssService.hashPrim(g, h, A, z, u, v));
 
-    const cx = mcl.mul(c, a);
+    const cx = mcl.mul(a, c);
     const s =  mcl.add(k, cx);
 
     let body = {
@@ -36,7 +36,7 @@ async function gjss(address, sendRequest) {
         payload: {
             A: A.getStr(10).slice(2),
             sigma: {
-                z: z.getStr(),
+                z: z.getStr(10).slice(2),
                 r: r,
                 s: s.getStr(),
                 c: c.getStr()
