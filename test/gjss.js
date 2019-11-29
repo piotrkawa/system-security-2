@@ -1,7 +1,6 @@
 const assert = require('assert');
-const mcl = require('mcl-wasm');
 
-const { CONFIG } = require('../config');
+const { CONFIG, mcl } = require('../config');
 const mclService = require('../src/services/mclService');
 const utilityService = require('../src/services/utilityService');
 const gjssService = require('../src/services/gjssService');
@@ -10,10 +9,9 @@ const n_r = CONFIG.gjss.n_r; // TODO: can be prettier
 
 
 async function gjss(address, sendRequest) { 
-    await mcl.init(CONFIG['CURVE_TYPE']);
     const msg = 'MY MESSAGE';
 
-    const g = gjssService.getGroupGenerator();
+    const g = mclService.getGroupGeneratorG1();
     const a = mclService.getRandomScalar();
     const A = mcl.mul(g, a);
 

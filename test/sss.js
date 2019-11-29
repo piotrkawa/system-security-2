@@ -1,17 +1,14 @@
 const assert = require('assert');
-const mcl = require('mcl-wasm');
 
-const { CONFIG } = require('../config');
+const { mcl } = require('../config');
 const mclService = require('../src/services/mclService');
 const sssService = require('../src/services/sssService');
 
-
 async function sss(address, sendRequest) {
-    await mcl.init(CONFIG['CURVE_TYPE']);
     
     const msg = "MY MESSAGE";
 
-    const g = sssService.getGroupGenerator();
+    const g = mclService.getGroupGeneratorG1();
     const a = mclService.getRandomScalar();
     const A = mcl.mul(g, a);
     const x = mclService.getRandomScalar();

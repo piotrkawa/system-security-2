@@ -1,10 +1,7 @@
-const { CONFIG, mcl } = require('../../config');
+const { mcl } = require('../../config');
 const mclService = require('./mclService');
 const utilityService = require('./utilityService');
-const { LOGGER } = require('../../logging');
 
-
-const CONST_G = CONFIG.CONST_G1;
 
 function computeC(msg, X) { 
     const inner = msg + X.getStr(10).slice(2);
@@ -18,7 +15,7 @@ async function verifySignature(payload) {
     const s = mclService.generateFr(payload.s);
     const msg = payload.msg;
     const c = computeC(msg, X);    
-    const g = getGroupGenerator();
+    const g = mclService.getGroupGeneratorG1();
 
     const leftSide = mcl.mul(g, s);
     const rightSide = mcl.add(X, mcl.mul(A, c));
@@ -27,8 +24,4 @@ async function verifySignature(payload) {
 }
 
 
-function getGroupGenerator () { 
-    return mclService.generateG1(`${CONST_G.x} ${CONST_G.y}`); 
-}
-
-module.exports = { getGroupGenerator, computeC, verifySignature }
+module.exports = { computeC, verifySignature }

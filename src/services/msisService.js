@@ -1,7 +1,6 @@
-const { CONFIG, mcl } = require('../../config');
+const { mcl } = require('../../config');
 const mclService = require('./mclService');
 
-const CONST_G = CONFIG.CONST_G1;
 
 function generateC () { 
     return mclService.getRandomScalar().getStr();
@@ -15,7 +14,7 @@ async function verifyCommitment (session, SRequest) {
     const c = mclService.generateFr(payload.c);
     const S = mclService.generateG2(SRequest);
 
-    const g = getGroupGenerator();
+    const g = mclService.getGroupGeneratorG1();
 
     const gHat = mcl.hashAndMapToG2(X.getStr(10).slice(2) + c.getStr(10));
     const XAc = mcl.add(X, mcl.mul(A, c)); 
@@ -27,8 +26,4 @@ async function verifyCommitment (session, SRequest) {
 }
 
 
-function getGroupGenerator () {
-    return mclService.generateG1(`${CONST_G.x} ${CONST_G.y}`); 
-}
-
-module.exports = { getGroupGenerator, generateC, verifyCommitment }
+module.exports = { generateC, verifyCommitment }

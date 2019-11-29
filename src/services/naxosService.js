@@ -13,7 +13,7 @@ function getSecretKey () {
     return mclService.generateFr(publicKey);
 }
 
-async function verifySignature (payload) {
+async function exchangeKeys (payload) {
     const g = getGroupGenerator()
     const A = mclService.generateG1(payload.A);
     const X = mclService.generateG1(payload.X);

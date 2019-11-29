@@ -4,14 +4,12 @@ const mcl = require('mcl-wasm');
 
 const { CONFIG } = require('../config');
 const mclService = require('../src/services/mclService');
-const sisService = require('../src/services/sisService');
-
 
 
 async function sis(address, sendRequest) {
     await mcl.init(CONFIG['CURVE_TYPE']);
 
-    const g = sisService.getGroupGenerator();
+    const g = mclService.getGroupGeneratorG1();
     const a = mclService.getRandomScalar();
     const x = mclService.getRandomScalar();
 

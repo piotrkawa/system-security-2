@@ -1,16 +1,11 @@
-const axios = require('axios');
 const assert = require('assert');
-const mcl = require('mcl-wasm');
 
-const { CONFIG } = require('../config');
+const { mcl } = require('../config');
 const mclService = require('../src/services/mclService');
-const msisService = require('../src/services/msisService');
 
 
 async function msis(address, sendRequest) {
-    await mcl.init(CONFIG['CURVE_TYPE']);
-
-    const g = msisService.getGroupGenerator();
+    const g = mclService.getGroupGeneratorG1();
     const a = mclService.getRandomScalar();
     const A = mcl.mul(g, a);
 

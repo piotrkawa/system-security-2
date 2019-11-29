@@ -1,9 +1,6 @@
-const { CONFIG, mcl } = require('../../config');
+const { mcl } = require('../../config');
 const mclService = require('./mclService');
 const utilityService = require('./utilityService');
-
-
-const CONST_G = CONFIG.CONST_G1;
 
 
 async function verifySignature(payload) {
@@ -16,7 +13,7 @@ async function verifySignature(payload) {
     const A = mclService.generateG1(payload.A);
     const msg = payload.msg;
 
-    const g = getGroupGenerator();
+    const g = mclService.getGroupGeneratorG1();
 
     const h = mcl.hashAndMapToG1(msg + r);
     
@@ -43,8 +40,4 @@ function hashPrim(...hashArguments) {
 }
 
 
-function getGroupGenerator () { 
-    return mclService.generateG1(`${CONST_G.x} ${CONST_G.y}`); 
-}
-
-module.exports = { getGroupGenerator, verifySignature, hashPrim }
+module.exports = { verifySignature, hashPrim }
