@@ -3,11 +3,27 @@ const mclService = require('./mclService');
 const utilityService = require('./utilityService');
 
 
-async function verifySignature(payload) {
-    const sigmaPayload = payload.sigma;
-    const X = mclService.generateG1(payload.X);
+function getPublicKey () {
+    const publicKey = CONFIG.naxos.pk;
+    return mclService.generateG1(`${publicKey.x} ${publicKey.y}`);
+}
+
+function getSecretKey () {
+    const publicKey = CONFIG.naxos.sk;
+    return mclService.generateFr(publicKey);
+}
+
+async function verifySignature (payload) {
+    const g = getGroupGenerator()
     const A = mclService.generateG1(payload.A);
-    const msg = payload.msg;
+    const X = mclService.generateG1(payload.X);
+
+    const B = getPublicKey();
+    const b = getSecretKey();
+    const eskB = utilityService.getRandomBits(512); // TODO: bytes or bits ???
+
+    
+
     return false;
 }
 
@@ -16,4 +32,4 @@ function getGroupGenerator () {
     return mclService.generateG1(`${CONST_G.x} ${CONST_G.y}`); 
 }
 
-module.exports = { getGroupGenerator, computeC, verifySignature }
+module.exports = { getGroupGenerator, getPublicKey, verifySignature }

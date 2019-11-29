@@ -4,6 +4,21 @@ const naxosService = require('../../services/naxosService');
 const { LOGGER } = require('../../../logging');
 
 
+router.get('/pkey', async function (req, res) {
+    LOGGER.log({message: `[NAXOS Pkey] Server's public key requested`});
+    try {
+        LOGGER.log({message: `[NAXOS Pkey] Server's public key successfully returned`});
+        const B = naxosService.getPublicKey();
+        const response = {
+            B: B.getStr().slice(2),
+        }
+    } catch (e) {
+        LOGGER.log({message: `[NAXOS Pkey] An error occured while returning server's public key`});
+    }
+    res.status(200).send(response);
+});
+
+
 router.post('/exchange', async function (req, res) {
     /*
         {
@@ -22,6 +37,7 @@ router.post('/exchange', async function (req, res) {
 
     try {
         // TODO: implement
+        const a = verifySignature (payload);
     } catch (e) {
         LOGGER.log({message: `[NAXOS Exchange] Key exchange not successful`});
         res.sendStatus(403);
@@ -30,22 +46,6 @@ router.post('/exchange', async function (req, res) {
         {
             "Y": "12345 67890",
             "msg": "" base64(sha3_512(K | msg))
-        } 
-    */
-});
-
-router.get('/pkey', async function (req, res) {
-    LOGGER.log({message: `[NAXOS Pkey] Server's public key requested`});
-
-    try {
-        LOGGER.log({message: `[NAXOS Pkey] Server's public key successfully returned`});
-
-    } catch (e) {
-        LOGGER.log({message: `[NAXOS Pkey] An error occured while returning server's public key`});
-    }
-    /*
-        {
-            "B": "12345 67890"
         } 
     */
 });

@@ -1,4 +1,4 @@
-var router = require('express').Router();
+const router = require('express').Router();
 
 const oisService = require('../../services/oisService');
 const utilityService = require('../../services/utilityService');
@@ -23,17 +23,6 @@ router.post('/init', async function (req, res) {
 
 
 router.post('/verify', async function (req, res) {
-    /*
-        {
-            "protocol_name": "ois",
-            "session_token": "string",
-            "payload": {
-                "s1": "12345 67890",
-                "s2": "12345 67890"
-            }
-        }
-    */
-
     LOGGER.log({message: `[OIS Verify] Verify started`});
     LOGGER.log({message: `[OIS Verify] Payload: ${JSON.stringify(req.body)}`});
     const { s1, s2 } = req.body.payload;
