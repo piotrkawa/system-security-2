@@ -4,7 +4,7 @@ const utilityService = require('./utilityService');
 const { LOGGER } = require('../../logging');
 
 
-const CONST_G = CONFIG.sss.CONST_G;
+const CONST_G = CONFIG.CONST_G1;
 
 function computeC(msg, X) { 
     const inner = msg + X.getStr(10).slice(2);

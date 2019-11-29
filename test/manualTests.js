@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 const SIS = require('./sis');
 const OIS = require('./ois');
 const MSIS = require('./msis');
@@ -9,7 +7,7 @@ const GJSS = require('./gjss');
 const ENDPOINTS_CONFIG = require('../endpointsConfig');
 const reqService = require('./requestCryptographyService');
 
-const PERSON = 'lukasz_klekowski';
+const PERSON = 'localhost';
 const address = ENDPOINTS_CONFIG[PERSON].address;
 const MY_PROTOCOLS = {
     'sis': SIS.sis,
@@ -25,7 +23,7 @@ function getURL() {
     const argv = (process.argv.slice(2)); 
 
     let port = 8080;
-    let url = `http://${address}`//:${port}`
+    let url = `http://${address}:${port}`
     
     if (argv.includes('--https')) {
         port = ENDPOINTS_CONFIG['httpsPort'];
@@ -39,7 +37,6 @@ function getURL() {
         url += '/chacha';
         encryptionType = reqService.EncryptionType.chacha;
     }
-    
     return url;
 }
 

@@ -1,7 +1,7 @@
 const { CONFIG, mcl } = require('../../config');
 const mclService = require('./mclService');
 
-const CONST_G = CONFIG.sis.CONST_G;
+const CONST_G = CONFIG.CONST_G1;
 
 function generateC () { 
     return mclService.getRandomScalar().getStr();

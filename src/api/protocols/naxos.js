@@ -34,11 +34,12 @@ router.post('/exchange', async function (req, res) {
     */
 });
 
-router.post('/pkey', async function (req, res) {
+router.get('/pkey', async function (req, res) {
     LOGGER.log({message: `[NAXOS Pkey] Server's public key requested`});
 
     try {
         LOGGER.log({message: `[NAXOS Pkey] Server's public key successfully returned`});
+
     } catch (e) {
         LOGGER.log({message: `[NAXOS Pkey] An error occured while returning server's public key`});
     }

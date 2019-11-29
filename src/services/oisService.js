@@ -1,8 +1,8 @@
 const mclService = require('./mclService');
 const { CONFIG, mcl } = require('../../config');
 
-const CONST_G1 = CONFIG.ois.CONST_G1;
-const CONST_G2 = CONFIG.ois.CONST_G2;
+const CONST_G1 = CONFIG.CONST_G1;
+const CONST_G2 = CONFIG.CONST_G2;
 
 
 function generateC() { 

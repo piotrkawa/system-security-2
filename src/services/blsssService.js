@@ -3,7 +3,7 @@ const mclService = require('./mclService');
 const utilityService = require('./utilityService');
 
 
-const CONST_G = CONFIG.sss.CONST_G;
+const CONST_G = CONFIG.CONST_G1;
 
 
 async function verifySignature(payload) {
