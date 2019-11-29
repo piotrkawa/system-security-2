@@ -31,7 +31,6 @@ async function sss(address, sendRequest) {
     let response = await sendRequest(`${address}/protocols/sss/verify`, body);
     let responseData = response.data;
     assert(responseData.valid);
-    console.log(responseData);
 }
 
 

@@ -1,4 +1,5 @@
-var router = require('express').Router();
+const router = require('express').Router();
+
 const sisService = require('../../services/sisService');
 const utilityService = require('../../services/utilityService');
 const dbService = require('../../services/dbService');
@@ -6,16 +7,6 @@ const { LOGGER } = require('../../../logging');
 
 
 router.post('/init', async function (req, res) {
-    /*
-    {
-        'protocol_name": 'sis',
-        "payload": {
-            "A": "12345 67890",
-            "X": "12345 67890"
-        }
-    }
-    */
-    
     LOGGER.log({message: `[SIS Init] Init started`});
     let payload = req.body.payload;
     LOGGER.log({message: `[SIS Init] Payload: ${JSON.stringify(payload)}`});
@@ -28,27 +19,10 @@ router.post('/init', async function (req, res) {
     const response = {'session_token': sessionToken, 'payload': {'c': c}};
     LOGGER.log({message: `[SIS Init] Reponse: ${JSON.stringify(response)}`});
     res.send(response);
-    /*
-    {
-        "session_token": "string",
-        "payload": {
-          "c": "12345 67890"
-        }
-    }
-    */
 })
 
 
 router.post('/verify', async function (req, res) {
-    /*
-        {
-            "protocol_name": "sis",
-            "session_token": "string",
-            "payload": {
-                "s": "12345 67890"
-            }
-        }
-    */
     LOGGER.log({message: `[SIS Verify] Verify started`});
     LOGGER.log({message: `[SIS Verify] Payload: ${JSON.stringify(req.body)}`});
     const sessionToken = req.body.session_token;
@@ -65,7 +39,7 @@ router.post('/verify', async function (req, res) {
     try {
         const isVerified = await sisService.verifyCommitment(session.dataValues, s);
         LOGGER.log({message: `[SIS Verify] Verified: ${isVerified}`});
-        if (isVerified === true) {
+        if (isVerified) {
             res.status(200).json({'verified': isVerified});
         } else {
             res.status(403).json({'verified': isVerified});
