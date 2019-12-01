@@ -1,11 +1,11 @@
 const assert = require('assert');
 
-const { CONFIG, mcl } = require('../config');
+const { mcl } = require('../config');
 const mclService = require('../src/services/mclService');
 
 
-async function ois(address, sendRequest) { 
-    await mcl.init(CONFIG['CURVE_TYPE']);
+async function ois(address, HTTPMethods) {
+    const { sendPOSTRequest } = HTTPMethods;
 
     const g1 = mclService.getGroupGeneratorG1();
     const g2 = mclService.getGroupGeneratorG2();
@@ -30,7 +30,7 @@ async function ois(address, sendRequest) {
         }
     };
 
-    let responseData = await sendRequest(`${address}/protocols/ois/init`, body);
+    let responseData = await sendPOSTRequest(`${address}/protocols/ois/init`, body);
     responseData = responseData.data;
     
     const session_token = responseData.session_token; 
@@ -52,7 +52,7 @@ async function ois(address, sendRequest) {
         }
     };
 
-    response = await sendRequest(`${address}/protocols/ois/verify`, body);
+    response = await sendPOSTRequest(`${address}/protocols/ois/verify`, body);
     responseData = response.data;
     assert(responseData.verified);
 }

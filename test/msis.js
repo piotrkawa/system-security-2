@@ -4,7 +4,9 @@ const { mcl } = require('../config');
 const mclService = require('../src/services/mclService');
 
 
-async function msis(address, sendRequest) {
+async function msis(address, HTTPMethods) {
+    const { sendPOSTRequest } = HTTPMethods;
+
     const g = mclService.getGroupGeneratorG1();
     const a = mclService.getRandomScalar();
     const A = mcl.mul(g, a);
@@ -20,7 +22,7 @@ async function msis(address, sendRequest) {
         }
     };
 
-    let response = await sendRequest(`${address}/protocols/msis/init`, body);
+    let response = await sendPOSTRequest(`${address}/protocols/msis/init`, body);
     let responseData = response.data;
     const session_token = responseData.session_token; 
     const c = new mcl.Fr();
@@ -39,7 +41,7 @@ async function msis(address, sendRequest) {
         }
     };
 
-    response = await sendRequest(`${address}/protocols/msis/verify`, body);
+    response = await sendPOSTRequest(`${address}/protocols/msis/verify`, body);
     responseData = response.data
     assert(responseData.verified);
 }

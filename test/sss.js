@@ -4,8 +4,8 @@ const { mcl } = require('../config');
 const mclService = require('../src/services/mclService');
 const sssService = require('../src/services/sssService');
 
-async function sss(address, sendRequest) {
-    
+async function sss(address, HTTPMethods) {
+    const { sendPOSTRequest } = HTTPMethods;
     const msg = "MY MESSAGE";
 
     const g = mclService.getGroupGeneratorG1();
@@ -25,7 +25,7 @@ async function sss(address, sendRequest) {
             msg: msg
         }
     };
-    let response = await sendRequest(`${address}/protocols/sss/verify`, body);
+    let response = await sendPOSTRequest(`${address}/protocols/sss/verify`, body);
     let responseData = response.data;
     assert(responseData.valid);
 }

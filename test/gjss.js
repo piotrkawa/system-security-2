@@ -8,7 +8,8 @@ const gjssService = require('../src/services/gjssService');
 const n_r = CONFIG.gjss.n_r; // TODO: can be prettier
 
 
-async function gjss(address, sendRequest) { 
+async function gjss(address, HTTPMethods) { 
+    const { sendPOSTRequest } = HTTPMethods;
     const msg = 'MY MESSAGE';
 
     const g = mclService.getGroupGeneratorG1();
@@ -43,7 +44,7 @@ async function gjss(address, sendRequest) {
         }
     };
 
-    let response = await sendRequest(`${address}/protocols/gjss/verify`, body);
+    let response = await sendPOSTRequest(`${address}/protocols/gjss/verify`, body);
     responseData = response.data;
     assert(responseData.valid);
 }

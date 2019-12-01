@@ -4,7 +4,8 @@ const { mcl } = require('../config');
 const mclService = require('../src/services/mclService');
 
 
-async function blsss(address, sendRequest) {
+async function blsss(address, HTTPMethods) {
+    const { sendPOSTRequest } = HTTPMethods;
     const msg = 'MY MESSAGE';
 
     const g = mclService.getGroupGeneratorG1();
@@ -23,7 +24,7 @@ async function blsss(address, sendRequest) {
         }
     };
 
-    let responseData = await sendRequest(`${address}/protocols/blsss/verify`, body);
+    let responseData = await sendPOSTRequest(`${address}/protocols/blsss/verify`, body);
     responseData = responseData.data;
     assert(responseData.valid);
 }

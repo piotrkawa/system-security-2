@@ -6,7 +6,9 @@ const { CONFIG } = require('../config');
 const mclService = require('../src/services/mclService');
 
 
-async function sis(address, sendRequest) {
+async function sis(address, HTTPMethods) {
+    const { sendPOSTRequest } = HTTPMethods;
+
     await mcl.init(CONFIG['CURVE_TYPE']);
 
     const g = mclService.getGroupGeneratorG1();
@@ -24,7 +26,7 @@ async function sis(address, sendRequest) {
         }
     };
 
-    let response = await sendRequest(`${address}/protocols/sis/init`, body);
+    let response = await sendPOSTRequest(`${address}/protocols/sis/init`, body);
     const sessionToken = response.data.session_token;
     const c = new mcl.Fr();
     c.setStr(response.data.payload.c);
@@ -40,7 +42,7 @@ async function sis(address, sendRequest) {
         }
     };
 
-    response = await sendRequest(`${address}/protocols/sis/verify`, body);
+    response = await sendPOSTRequest(`${address}/protocols/sis/verify`, body);
     assert(response.data.verified)
 }
 

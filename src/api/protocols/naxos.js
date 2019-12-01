@@ -38,6 +38,7 @@ router.post('/exchange', async function (req, res) {
     try {
         // TODO: implement
         const a = naxosService.exchangeKeys(payload);
+        
     } catch (e) {
         LOGGER.log({message: `[NAXOS Exchange] Key exchange not successful`});
         res.sendStatus(403);

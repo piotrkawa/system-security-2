@@ -4,6 +4,8 @@ const MSIS = require('./msis');
 const SSS = require('./sss');
 const BLSSS = require('./blsss');
 const GJSS = require('./gjss');
+const NAXOS = require('./gjss');
+
 const ENDPOINTS_CONFIG = require('../endpointsConfig');
 const reqService = require('./requestCryptographyService');
 
@@ -15,7 +17,8 @@ const MY_PROTOCOLS = {
     'msis': MSIS.msis,
     'sss': SSS.sss,
     'blsss': BLSSS.blsss,
-    'gjss': GJSS.gjss
+    'gjss': GJSS.gjss,
+    // 'naxos': NAXOS.naxos
 };
 let encryptionType = reqService.EncryptionType.none;
 
@@ -43,26 +46,31 @@ function getURL() {
 async function test (url, encryptionType) {
     const sendPOSTRequest = reqService.getRequestFunction(encryptionType);
     const sendGETRequest = reqService.getRequestFunction(encryptionType, 'GET');
-    performAvailableProtocols(sendGETRequest, sendPOSTRequest);
+    const HTTPMethods = {
+        'sendPOSTRequest': sendPOSTRequest,
+        'sendGETRequest': sendGETRequest
+    };
+
+    performAvailableProtocols(HTTPMethods);
     // testManually(url, sendPOSTRequest);
 }
 
-async function testManually(url, sendPOSTRequest) {
-    GJSS.gjss(url, sendPOSTRequest);
+async function testManually(url, HTTPMethods) {
+    // GJSS.gjss(url, sendPOSTRequest);
     // const response = await axios.get(url + '/salsa/protocols');
     // console.log(response)
 }
 
-async function performAvailableProtocols(sendGETRequest, sendPOSTRequest) {
-    a = `${url}/protocols`
-    const response = await sendGETRequest(a);
+async function performAvailableProtocols(HTTPMethods) {
+    const { sendGETRequest } = HTTPMethods;
+    const response = await sendGETRequest(`${url}/protocols`);
     const availableProtocols = response.data.schemas;
     console.log(`Available protocols: ${availableProtocols}`);
     for (protocol of availableProtocols) {
         if (MY_PROTOCOLS.hasOwnProperty(protocol)) {
             const protocolFunction = MY_PROTOCOLS[protocol];
             console.log(`Performing ${protocol}`);
-            await protocolFunction(url, sendPOSTRequest);
+            await protocolFunction(url, HTTPMethods);
         } else {
             console.log(`${protocol} not supported`)
         }
