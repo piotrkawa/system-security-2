@@ -12,10 +12,10 @@ router.get('/pkey', async function (req, res) {
         const response = {
             B: B.getStr().slice(2),
         }
+        res.status(200).send(response);
     } catch (e) {
         LOGGER.log({message: `[NAXOS Pkey] An error occured while returning server's public key`});
     }
-    res.status(200).send(response);
 });
 
 
@@ -37,8 +37,9 @@ router.post('/exchange', async function (req, res) {
 
     try {
         // TODO: implement
-        const a = naxosService.exchangeKeys(payload);
-        
+        const response = await naxosService.exchangeKeys(payload);
+        res.send(response);
+
     } catch (e) {
         LOGGER.log({message: `[NAXOS Exchange] Key exchange not successful`});
         res.sendStatus(403);

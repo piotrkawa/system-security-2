@@ -1,17 +1,13 @@
-const axios = require('axios');
 const assert = require('assert');
-// const mcl = require('mcl-wasm');
-
-const { CONFIG, mcl } = require('../config');
+const crypto = require('crypto');
+const { mcl, CONFIG } = require('../config');
 const mclService = require('../src/services/mclService');
 const utilityService = require('../src/services/utilityService');
 
 
 async function naxos(address, HTTPMethods) { 
     const { sendGETRequest, sendPOSTRequest } = HTTPMethods;
-
     await mcl.init(CONFIG['CURVE_TYPE']);
-
 
     const g = mclService.getGroupGeneratorG1();
     const a = mclService.getRandomScalar();
@@ -19,12 +15,16 @@ async function naxos(address, HTTPMethods) {
 
     const eskA = utilityService.getRandomBits(512);
     
+    
     let response = await sendGETRequest(`${address}/protocols/naxos/pkey`);
-    const B = mclService.generateG1(response.data.B);
+    const BStr = response.data.B;
+    const B = mclService.generateG1(BStr);
 
     let message = 'THIS IS MY MESSAGE';
 
-    const H1 = utilityService.getHashOfValue(eskA + a.getStr());
+    let H1 = utilityService.getHashOfValue(eskA + a.getStr());
+    H1 = mclService.generateFr(H1);
+
     const X = mcl.mul(g, H1);
 
     let body = {
@@ -38,7 +38,7 @@ async function naxos(address, HTTPMethods) {
 
     response = await sendPOSTRequest(`${address}/protocols/naxos/exchange`, body);
 
-    const Y = mclService.generateG1(responseData.data.Y);
+    const Y = mclService.generateG1(response.data.Y);
     const msg = response.data.msg;
     
     const Ya = mcl.mul(Y, a);
@@ -46,7 +46,9 @@ async function naxos(address, HTTPMethods) {
     const YH1 = mcl.mul(Y, H1);
 
 
-    let K = utilityService.getHashOfValue(Ya.getStr().slice(2) + BH1.getStr().slice(2) + YH1.getStr().slice(2) + A.getStr().slice(2) + BStr);
+    // let K = utilityService.getHashOfValue(Ya.getStr().slice(2) + BH1.getStr().slice(2) + YH1.getStr().slice(2) + A.getStr().slice(2) + BStr);
+    const hash2 = crypto.createHash('sha3-512')
+    let K = hash2.update(Ya.getStr().slice(2) + BH1.getStr().slice(2) + YH1.getStr().slice(2) + A.getStr().slice(2) + BStr).digest()
     K = new Uint8Array(K);
 
     message = Buffer.from(message)
@@ -55,7 +57,10 @@ async function naxos(address, HTTPMethods) {
     concatenatedArray.set(K)
     concatenatedArray.set(message, K.length)
 
-    const msgg = utilityService.getHashOfValue(concatenatedArray, 'base64');
+    // const msgg = utilityService.getHashOfValue(concatenatedArray, 'base64');
+    const msgHash1 = crypto.createHash('sha3-512')
+
+    const msgg = msgHash1.update(concatenatedArray).digest('base64')
 
     assert(msg === msgg);
 

@@ -8,6 +8,7 @@ router.use('/sss', require('./protocols/sss'));
 router.use('/msis', require('./protocols/msis'));
 router.use('/blsss', require('./protocols/blsss'));
 router.use('/gjss', require('./protocols/gjss'));
+router.use('/naxos', require('./protocols/naxos'));
 
 router.get('/', function (req, res) {
     res.send({'schemas': CONFIG.CURRENTLY_SUPPORTED_PROTOCOLS})

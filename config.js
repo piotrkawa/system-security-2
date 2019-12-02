@@ -28,6 +28,6 @@ const CONFIG = {
     }
 };
 
-mcl.init(CONFIG.CURVE_TYPE);
+mcl.init(CONFIG['CURVE_TYPE']);
 
 module.exports = { CONFIG, mcl }

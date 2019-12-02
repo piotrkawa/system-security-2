@@ -4,7 +4,8 @@ const MSIS = require('./msis');
 const SSS = require('./sss');
 const BLSSS = require('./blsss');
 const GJSS = require('./gjss');
-const NAXOS = require('./gjss');
+const NAXOS = require('./naxos');
+
 
 const ENDPOINTS_CONFIG = require('../endpointsConfig');
 const reqService = require('./requestCryptographyService');
@@ -18,21 +19,21 @@ const MY_PROTOCOLS = {
     'sss': SSS.sss,
     'blsss': BLSSS.blsss,
     'gjss': GJSS.gjss,
-    // 'naxos': NAXOS.naxos
+    'naxos': NAXOS.naxos
 };
 let encryptionType = reqService.EncryptionType.none;
 
 function getURL() {
-    const argv = (process.argv.slice(2)); 
+    const argv = (process.argv.slice(2));
 
     let port = 8080;
     let url = `http://${address}:${port}`
-    
+
     if (argv.includes('--https')) {
         port = ENDPOINTS_CONFIG['httpsPort'];
         url = `https://${address}:${port}`
     }
-    
+
     if (argv.includes('--salsa')) {
         url += '/salsa';
         encryptionType = reqService.EncryptionType.salsa;
@@ -43,7 +44,7 @@ function getURL() {
     return url;
 }
 
-async function test (url, encryptionType) {
+async function test(url, encryptionType) {
     const sendPOSTRequest = reqService.getRequestFunction(encryptionType);
     const sendGETRequest = reqService.getRequestFunction(encryptionType, 'GET');
     const HTTPMethods = {
@@ -51,12 +52,14 @@ async function test (url, encryptionType) {
         'sendGETRequest': sendGETRequest
     };
 
-    performAvailableProtocols(HTTPMethods);
-    // testManually(url, sendPOSTRequest);
+    // performAvailableProtocols(HTTPMethods);
+    testManually(url, HTTPMethods);
 }
 
 async function testManually(url, HTTPMethods) {
-    // GJSS.gjss(url, sendPOSTRequest);
+    // await SIS.sis(url, HTTPMethods);
+    // await GJSS.gjss(url, HTTPMethods);
+    await NAXOS.naxos(url, HTTPMethods);
     // const response = await axios.get(url + '/salsa/protocols');
     // console.log(response)
 }

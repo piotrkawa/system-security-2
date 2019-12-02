@@ -1,4 +1,3 @@
-const axios = require('axios');
 const assert = require('assert');
 const mcl = require('mcl-wasm');
 
@@ -8,7 +7,6 @@ const mclService = require('../src/services/mclService');
 
 async function sis(address, HTTPMethods) {
     const { sendPOSTRequest } = HTTPMethods;
-
     await mcl.init(CONFIG['CURVE_TYPE']);
 
     const g = mclService.getGroupGeneratorG1();
