@@ -23,16 +23,25 @@ async function exchangeKeys (payload) {
     const b = getSecretKey();
     const eskB = utilityService.getRandomBits(512);
 
-    const h = utilityService.getHashOfValue(eskB + b.getStr());
+    // const h = utilityService.getHashOfValue(eskB + b.getStr());
+    
+    const hash1 = crypto.createHash('sha3-512')
 
-    const H1 = mclService.generateFr(h);
+    const h = hash1.update(eskB + b.getStr()).digest('hex')
+    const rInt = BigInt(CONFIG.r);
+    const hashInt = BigInt('0x' + h);
+    const intValue = (hashInt % rInt).toString();
+
+    const H1 = mclService.generateFr(intValue);
     const Y = mcl.mul(g, H1);
 
     const AH1 = mcl.mul(A, H1)
     const Xb = mcl.mul(X, b)
     const XH1 = mcl.mul(X, H1)
 
-    const K = utilityService.getHashOfValue(AH1.getStr().slice(2) + Xb.getStr().slice(2) + XH1.getStr().slice(2) + payload.A + B.getStr().slice(2));
+    const hash2 = crypto.createHash('sha3-512');
+
+    const K = hash2.update(AH1.getStr().slice(2) + Xb.getStr().slice(2) + XH1.getStr().slice(2) + payload.A + B.getStr().slice(2)).digest();
 
     msg = Buffer.from(msg)
     msg = new Uint8Array(msg)

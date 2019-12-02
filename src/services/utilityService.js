@@ -10,8 +10,7 @@ function generateToken () {
 
 function getHashOfValue(value, format='hex') {
     const hash = crypto.createHash('sha3-512');
-    hash.update(value);
-    const digestedHash = hash.digest(format);
+    const digestedHash = hash.update(value).digest(format);
     const q = BigInt(CONFIG.r);
     const hashInt = BigInt('0x' + digestedHash);
     return (hashInt % q).toString();
