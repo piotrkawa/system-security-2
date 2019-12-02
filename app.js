@@ -2,8 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan')
 const OpenApiValidator = require('express-openapi-validator').OpenApiValidator;
-
 const app = express();
+
+const { LOGGER } = require('./logging');
 
 var argv = (process.argv.slice(2));
 let server;
@@ -29,29 +30,22 @@ app.use(express.json());
 // });
 
 
-// app.use(function (req, res, next) {
-//     console.log('Time:', Date.now())
-//     next()
-//   })
-
-
-
 let PORT = 8443;
 
 if (argv.includes('--https')) {
     const https = require('https');
     const credentials = require('./credentials');
     server = https.createServer(credentials, app);
-    communicate = `HTTPS Server listening on port ${PORT}!`;
+    communicate = `[Server Start] HTTPS Server listening on port ${PORT}!`;
 } else {
     PORT = 8080;
     const http = require('http');
     server = http.createServer(app);
-    communicate = `HTTP Server listening on port ${PORT}!`;
+    communicate = `[Server Start] HTTP Server listening on port ${PORT}!`;
 }
 
 server.listen(PORT, function() {
-    console.log(communicate)
+    LOGGER.log({message: `${communicate}`})
 });
 
 module.exports = app

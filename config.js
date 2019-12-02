@@ -1,13 +1,13 @@
 const mcl = require('mcl-wasm');
 
 const CONFIG = {
-    'HTTPS_PORT': 8443,
-    'HTTP_PORT': 8080,
-    'CURVE_TYPE': mcl.BLS12_381,
-    'CURRENTLY_SUPPORTED_PROTOCOLS': ['sis', 'ois', 'sss', 'msis', 'blsss', 'gjss', 'naxos'],
-    'r': '0x73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001',
-    'SALSA_KEY_PATH': '/home/pietrek/UCZELNIA/system-security-2/assets/encryption_keys/salsa_key.bin',
-    'CHACHA_KEY_PATH': '/home/pietrek/UCZELNIA/system-security-2/assets/encryption_keys/chacha_key.bin',
+    HTTPS_PORT: 8443,
+    HTTP_PORT: 8080,
+    CURVE_TYPE: mcl.BLS12_381,
+    CURRENTLY_SUPPORTED_PROTOCOLS: ['sis', 'ois', 'sss', 'msis', 'blsss', 'gjss', 'naxos'],
+    r: '0x73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001',
+    SALSA_KEY_PATH: '/home/pietrek/UCZELNIA/system-security-2/assets/encryption_keys/salsa_key.bin',
+    CHACHA_KEY_PATH: '/home/pietrek/UCZELNIA/system-security-2/assets/encryption_keys/chacha_key.bin',
     CONST_G1: {
         x: '3685416753713387016781088315183077757961620795782546409894578378688607592378376318836054947676345821548104185464507',
         y: '1339506544944476473020471379941921221584933875938349620426543736416511423956333506472724655353366534992391756441569'

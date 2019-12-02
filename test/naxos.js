@@ -22,15 +22,8 @@ async function naxos(address, HTTPMethods) {
 
     let message = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 
-    // let H1 = utilityService.getHashOfValue(eskA + a.getStr());
-    const hash1 = crypto.createHash('sha3-512')
-    const h = hash1.update(eskA + a.getStr()).digest('hex')
-    const rInt = BigInt(CONFIG.r);
-    const hashInt = BigInt('0x' + h);
-    const intValue = (hashInt % rInt).toString();
-
-    const H1 = mclService.generateFr(intValue)
-    // H1 = mclService.generateFr(H1);
+    let H1 = utilityService.getHashOfValue(eskA + a.getStr());
+    H1 = mclService.generateFr(H1);
 
     const X = mcl.mul(g, H1);
 

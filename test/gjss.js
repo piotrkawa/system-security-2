@@ -10,13 +10,15 @@ const n_r = CONFIG.gjss.n_r; // TODO: can be prettier
 
 async function gjss(address, HTTPMethods) { 
     const { sendPOSTRequest } = HTTPMethods;
+    await mcl.init(CONFIG['CURVE_TYPE']);
     const msg = 'MY MESSAGE';
 
     const g = mclService.getGroupGeneratorG1();
     const a = mclService.getRandomScalar();
     const A = mcl.mul(g, a);
 
-    const r = utilityService.getRandomBits(n_r);
+    let r = utilityService.getRandomBits(n_r-1);
+    r = '1' + r;
     const h = mcl.hashAndMapToG1(msg + r);
     const z = mcl.mul(h, a);
 

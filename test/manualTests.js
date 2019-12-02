@@ -10,7 +10,7 @@ const NAXOS = require('./naxos');
 const ENDPOINTS_CONFIG = require('../endpointsConfig');
 const reqService = require('./requestCryptographyService');
 
-const PERSON = 'localhost';
+const PERSON = 'krzysztof_nowak';
 const address = ENDPOINTS_CONFIG[PERSON].address;
 const MY_PROTOCOLS = {
     'sis': SIS.sis,
@@ -52,8 +52,8 @@ async function test(url, encryptionType) {
         'sendGETRequest': sendGETRequest
     };
 
-    // performAvailableProtocols(HTTPMethods);
-    testManually(url, HTTPMethods);
+    performAvailableProtocols(HTTPMethods);
+    // testManually(url, HTTPMethods);
 }
 
 async function testManually(url, HTTPMethods) {
