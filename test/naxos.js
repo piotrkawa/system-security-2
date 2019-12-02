@@ -47,7 +47,7 @@ async function naxos(address, HTTPMethods) {
 
 
     const hash2 = crypto.createHash('sha3-512')
-    let K = hash2.update(Ya.getStr().slice(2) + BH1.getStr().slice(2) + YH1.getStr().slice(2) + A.getStr().slice(2) + BStr).digest()
+    let K = hash2.update(Ya.getStr().slice(2) + BH1.getStr().slice(2) + YH1.getStr().slice(2) + A.getStr().slice(2) + BStr).digest();
     K = new Uint8Array(K);
 
     message = Buffer.from(message)

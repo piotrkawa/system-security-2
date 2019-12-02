@@ -23,5 +23,21 @@ async function verifySignature(payload) {
     return leftSide.getStr() === rightSide.getStr();
 }
 
+function generateSignature(message, secretKey) {
+    const g = mclService.getGroupGeneratorG1();
+    const x = mclService.getRandomScalar();
+    const X = mcl.mul(g, x);
 
-module.exports = { computeC, verifySignature }
+    const c = computeC(message, X);
+    const s = mcl.add(x, mcl.mul(secretKey, c));
+
+    return {
+        s: s.getStr(10),
+        A: X.getStr(10).slice(2),
+        msg: message
+    }
+}
+
+
+
+module.exports = { computeC, verifySignature, generateSignature }
