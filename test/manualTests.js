@@ -8,7 +8,7 @@ const MY_PROTOCOLS = {
     'blsss': require('./blsss').blsss,
     'gjss': require('./gjss').gjss,
     'naxos': require('./naxos').naxos,
-    'naxos': require('./sigma').sigma
+    'sigma': require('./sigma').sigma
 };
 
 const PERSON = 'localhost';
@@ -45,12 +45,13 @@ async function test(url, encryptionType) {
         'sendGETRequest': sendGETRequest
     };
 
-    performAvailableProtocols(url, HTTPMethods);
-    // testManually(url, HTTPMethods);
+    // performAvailableProtocols(url, HTTPMethods);
+    testManually(url, HTTPMethods);
 }
 
 async function testManually(url, HTTPMethods) {
-    await NAXOS.naxos(url, HTTPMethods);
+    // await NAXOS.naxos(url, HTTPMethods);
+    await require('./sigma').sigma(url, HTTPMethods);
 }
 
 async function performAvailableProtocols(url, HTTPMethods) {

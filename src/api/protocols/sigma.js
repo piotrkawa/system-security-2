@@ -1,5 +1,5 @@
 const router = require('express').Router();
-
+const dbService = require('../../services/dbService');
 const sigmaService = require('../../services/sigmaService');
 const { LOGGER } = require('../../../logging');
 
@@ -8,7 +8,7 @@ router.post('/init', async function (req, res) {
     LOGGER.log({message: `[NAXOS Init] Server's public key requested`});
     try {
         LOGGER.log({message: `[NAXOS Init] Server's public key successfully returned`});
-        const response = sigmaService.init(req.body.payload);
+        const response = await sigmaService.init(req.body.payload);
         res.status(200).send(response);
     } catch (e) {
         LOGGER.log({message: `[NAXOS Init] An error occured while returning server's public key`});
@@ -21,8 +21,6 @@ router.post('/exchange', async function (req, res) {
     let payload = req.body.payload;
     LOGGER.log({message: `[SIGMA Exchange] Payload: ${JSON.stringify(payload)}`});
 
-    try {
-
     const sessionToken = req.body.session_token;
 
     const session = await dbService.findSession(sessionToken);
@@ -32,15 +30,9 @@ router.post('/exchange', async function (req, res) {
         return;
     }
     try {
-        const isVerified = await sigmaService.exchangeKeys(session.dataValues, payload);
-        // LOGGER.log({message: `[SIS Verify] Verified: ${isVerified}`});
-        // if (isVerified) {
-        //     res.status(200).json({'verified': isVerified});
-        // } else {
-        //     res.status(403).json({'verified': isVerified});
-        // }
+        const response = await sigmaService.exchangeKeys(session.dataValues.payload, payload);
+        res.status(200).json(response);
     } catch (e) {
-        LOGGER.log({message: `[SIS Verify] Verification not successful`});
         res.sendStatus(403);
     }
 });

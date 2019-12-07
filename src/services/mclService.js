@@ -35,12 +35,12 @@ function getGroupGeneratorG2() {
 
 function getPublicKey() {
     const publicKey = CONFIG.naxos.pk;
-    return mclService.generateG1(`${publicKey.x} ${publicKey.y}`);
+    return generateG1(`${publicKey.x} ${publicKey.y}`);
 }
 
 function getSecretKey() {
     const publicKey = CONFIG.naxos.sk;
-    return mclService.generateFr(publicKey);
+    return generateFr(publicKey);
 }
 
 module.exports = {
