@@ -22,17 +22,17 @@ async function init(payload) {
     const gxy = mcl.mul(X, y);
     const B = mclService.getPublicKey();
     const BStr = B.getStr().slice(2);
-    
+
     // const gxy = mcl.mul(X, y);
     const hmacKey = generateKey('mac_' + gxy.getStr().slice(2));
-    const hmac =  chacha.createHmac(hmacKey);
+    const hmac = chacha.createHmac(hmacKey);
     const BMAC = hmac.update(BStr).digest('base64');
-    
+
     const message = X.getStr().slice(2) + Y.getStr().slice(2);
     const sessionToken = utilityService.generateToken();
-    
+
     const informationToSave = {
-        X: X.getStr().slice(2), 
+        X: X.getStr().slice(2),
         Y: Y.getStr().slice(2),
         y: y.getStr()
     };
@@ -57,7 +57,7 @@ async function init(payload) {
     return response;
 }
 
-async function exchangeKeys (dbValues, payload) {
+async function exchangeKeys(dbValues, payload) {
     const { X, Y, y } = dbValues;
     let { a_mac, A, msg, sig } = payload;
 
@@ -65,7 +65,7 @@ async function exchangeKeys (dbValues, payload) {
     const s = sig['s'];
     const sigMsg = sig['msg'];
 
-    
+
     // verify HMAC
     const gxy = mcl.mul(mclService.generateG1(X), mclService.generateFr(y));
     const hmacKey = generateKey('mac_' + gxy.getStr().slice(2));
@@ -75,7 +75,7 @@ async function exchangeKeys (dbValues, payload) {
     assert(a_mac === generatedMac);
 
     // verify signature
-    assert(sssService.verifySignature({A: A, X: sigX, s: s}));
+    assert(sssService.verifySignature({ A: A, X: sigX, s: s }));
 
     // generate key
     const sessionKey = generateKey('session_' + gxy.getStr().slice(2));
@@ -84,7 +84,7 @@ async function exchangeKeys (dbValues, payload) {
     const concatenatedArray = new Uint8Array(sessionKey.length + msg.length);
     concatenatedArray.set(sessionKey);
     concatenatedArray.set(msg, sessionKey.length);
-    
+
     const msgHash1 = crypto.createHash('sha3-512');
     const encryptedMessage = msgHash1.update(concatenatedArray).digest('base64');
 

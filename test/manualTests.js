@@ -11,7 +11,7 @@ const MY_PROTOCOLS = {
     'sigma': require('./sigma').sigma
 };
 
-const PERSON = 'localhost';
+const PERSON = 'krzysztof_nowak';
 const address = ENDPOINTS_CONFIG[PERSON].address;
 
 let encryptionType = reqService.EncryptionType.none;
