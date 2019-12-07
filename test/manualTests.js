@@ -11,7 +11,7 @@ const MY_PROTOCOLS = {
     'sigma': require('./sigma').sigma
 };
 
-const PERSON = 'krzysztof_nowak';
+const PERSON = 'localhost';
 const address = ENDPOINTS_CONFIG[PERSON].address;
 
 let encryptionType = reqService.EncryptionType.none;
@@ -45,8 +45,8 @@ async function test(url, encryptionType) {
         'sendGETRequest': sendGETRequest
     };
 
-    // performAvailableProtocols(url, HTTPMethods);
-    testManually(url, HTTPMethods);
+    performAvailableProtocols(url, HTTPMethods);
+    // testManually(url, HTTPMethods);
 }
 
 async function testManually(url, HTTPMethods) {

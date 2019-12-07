@@ -1,11 +1,13 @@
-const { CONFIG, mcl } = require('../../config');
-const mclService = require('./mclService');
-const utilityService = require('./utilityService');
-const crypto = require('crypto');
-const sssService = require('./sssService');
-const dbService = require('./dbService');
 const chacha = require('chacha');
 const assert = require('assert');
+const crypto = require('crypto');
+
+const { mcl } = require('../../config');
+const mclService = require('./mclService');
+const utilityService = require('./utilityService');
+const sssService = require('./sssService');
+const dbService = require('./dbService');
+
 
 function generateKey(value) {
     const hash = crypto.createHash('sha3-256');
@@ -23,7 +25,6 @@ async function init(payload) {
     const B = mclService.getPublicKey();
     const BStr = B.getStr().slice(2);
 
-    // const gxy = mcl.mul(X, y);
     const hmacKey = generateKey('mac_' + gxy.getStr().slice(2));
     const hmac = chacha.createHmac(hmacKey);
     const BMAC = hmac.update(BStr).digest('base64');
@@ -65,7 +66,6 @@ async function exchangeKeys(dbValues, payload) {
     const s = sig['s'];
     const sigMsg = sig['msg'];
 
-
     // verify HMAC
     const gxy = mcl.mul(mclService.generateG1(X), mclService.generateFr(y));
     const hmacKey = generateKey('mac_' + gxy.getStr().slice(2));
@@ -85,13 +85,12 @@ async function exchangeKeys(dbValues, payload) {
     concatenatedArray.set(sessionKey);
     concatenatedArray.set(msg, sessionKey.length);
 
-    const msgHash1 = crypto.createHash('sha3-512');
-    const encryptedMessage = msgHash1.update(concatenatedArray).digest('base64');
+    const hashSHA3512 = crypto.createHash('sha3-512');
+    const encryptedMessage = hashSHA3512.update(concatenatedArray).digest('base64');
 
     return {
         msg: encryptedMessage
     }
 }
 
-
-module.exports = { exchangeKeys, init }
+module.exports = { init, exchangeKeys }

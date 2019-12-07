@@ -4,7 +4,16 @@ const CONFIG = {
     HTTPS_PORT: 8443,
     HTTP_PORT: 8080,
     CURVE_TYPE: mcl.BLS12_381,
-    CURRENTLY_SUPPORTED_PROTOCOLS: ['sis', 'ois', 'sss', 'msis', 'blsss', 'gjss', 'naxos'],
+    CURRENTLY_SUPPORTED_PROTOCOLS: [
+        'sis',
+        'ois',
+        'sss',
+        'msis',
+        'blsss',
+        'gjss',
+        'naxos',
+        'sigma'
+    ],
     r: '0x73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001',
     SALSA_KEY_PATH: '/home/pietrek/UCZELNIA/system-security-2/assets/encryption_keys/salsa_key.bin',
     CHACHA_KEY_PATH: '/home/pietrek/UCZELNIA/system-security-2/assets/encryption_keys/chacha_key.bin',
