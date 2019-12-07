@@ -1,6 +1,7 @@
-var router = require('express').Router();
+const router = require('express').Router();
 
 const naxosService = require('../../services/naxosService');
+const mclService = require('../../services/mclService');
 const { LOGGER } = require('../../../logging');
 
 
@@ -8,7 +9,7 @@ router.get('/pkey', async function (req, res) {
     LOGGER.log({message: `[NAXOS Pkey] Server's public key requested`});
     try {
         LOGGER.log({message: `[NAXOS Pkey] Server's public key successfully returned`});
-        const B = naxosService.getPublicKey();
+        const B = mclService.getPublicKey();
         const response = {
             B: B.getStr().slice(2),
         }
@@ -37,7 +38,7 @@ router.post('/exchange', async function (req, res) {
 
     try {
         // TODO: implement
-        const response = await naxosService.exchangeKeys(payload);
+        const response = naxosService.exchangeKeys(payload);
         res.send(response);
 
     } catch (e) {

@@ -11,10 +11,10 @@ const { CONFIG } = require('../../config');
 async function encryptSalsa(data) {
     await _sodium.ready;
     const sodium = _sodium;
-    let encoder = new te.TextEncoder('utf-8');
+    const encoder = new te.TextEncoder('utf-8');
     const binKey = fs.readFileSync(CONFIG.SALSA_KEY_PATH);
-    let key = sodium.from_hex(binKey.toString('hex'));
-    let nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
+    const key = sodium.from_hex(binKey.toString('hex'));
+    const nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
    
     data = encoder.encode(JSON.stringify(data));
     const ciphertext = sodium.crypto_secretbox_easy(data, nonce, key);
@@ -55,9 +55,9 @@ async function encryptChaCha(data) {
 
 async function decryptChaCha(data) {
     const binKey = fs.readFileSync(CONFIG.CHACHA_KEY_PATH, null);
-    let nonce = Buffer.from(data.nonce, 'base64');
-    let tag = Buffer.from(data.tag, 'base64');
-    let ciphertext = Buffer.from(data.ciphertext, 'base64');
+    const nonce = Buffer.from(data.nonce, 'base64');
+    const tag = Buffer.from(data.tag, 'base64');
+    const ciphertext = Buffer.from(data.ciphertext, 'base64');
     const chcachaDecipher = chacha.createDecipher(binKey, nonce);
     chcachaDecipher.setAuthTag(tag);
     data = chcachaDecipher.update(ciphertext, 'utf8');

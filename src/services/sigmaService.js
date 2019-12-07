@@ -6,16 +6,6 @@ const sssService = require('./sssService');
 const dbService = require('./dbService');
 
 
-function getPublicKey () {
-    const publicKey = CONFIG.naxos.pk;
-    return mclService.generateG1(`${publicKey.x} ${publicKey.y}`);
-}
-
-function getSecretKey () {
-    const publicKey = CONFIG.naxos.sk;
-    return mclService.generateFr(publicKey);
-}
-
 function generateKey(value) {
     const hash = crypto.createHash('sha3-256');
     return hash.update(value).digest();
@@ -29,7 +19,7 @@ async function init(payload) {
     const Y = mcl.mul(g, y);
 
     const gxy = mcl.mul(X, Y).getStr().slice(2);
-    const B = getPublicKey();
+    const B = mclService.getPublicKey();
     const BStr = B.getStr().slice(2);
     
     const hmacKey = generateKey('mac_' + gxy);
@@ -54,7 +44,7 @@ async function init(payload) {
             b_mac: BMAC,
             B: B.getStr().slice(2),
             Y: Y.getStr().slice(2),
-            sig: sssService.generateSignature(message, getSecretKey()),
+            sig: sssService.generateSignature(message, mclService.getSecretKey()),
         },
         session_token: sessionToken
     };
@@ -82,10 +72,16 @@ async function exchangeKeys (dbValues, payload) {
     const sessionKey = generateKey('session_' + gxy);
 
 
+    // sessionKey + msg
+
+    const msgHash1 = crypto.createHash('sha3-512');
+    const encryptedMessage = msgHash1.update(concatenatedArray).digest('base64')
+
+
     return {
-        msg: utilityService.getHashOfValue(sessionKey + msg, 'base64');
+        msg: encryptedMessage
     }
 }
 
 
-module.exports = { getPublicKey, exchangeKeys, init }
+module.exports = { exchangeKeys, init }
