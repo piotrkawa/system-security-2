@@ -58,7 +58,7 @@ async function init(payload) {
     return response;
 }
 
-async function exchangeKeys(dbValues, payload) {
+function exchangeKeys(dbValues, payload) {
     const { X, Y, y } = dbValues;
     let { a_mac, A, msg, sig } = payload;
 

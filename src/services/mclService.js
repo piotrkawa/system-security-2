@@ -34,12 +34,12 @@ function getGroupGeneratorG2() {
 }
 
 function getPublicKey() {
-    const publicKey = CONFIG.naxos.pk;
+    const publicKey = CONFIG.KEYS.PUBLIC_KEY;
     return generateG1(`${publicKey.x} ${publicKey.y}`);
 }
 
 function getSecretKey() {
-    const publicKey = CONFIG.naxos.sk;
+    const publicKey = CONFIG.KEYS.SECRET_KEY;
     return generateFr(publicKey);
 }
 

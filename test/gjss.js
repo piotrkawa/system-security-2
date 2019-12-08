@@ -5,7 +5,7 @@ const mclService = require('../src/services/mclService');
 const utilityService = require('../src/services/utilityService');
 const gjssService = require('../src/services/gjssService');
 
-const n_r = CONFIG.gjss.n_r; // TODO: can be prettier
+const n_r = CONFIG.GJSS.n_r; // TODO: can be prettier
 
 
 async function gjss(address, HTTPMethods) { 
