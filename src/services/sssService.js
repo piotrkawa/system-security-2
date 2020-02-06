@@ -9,7 +9,7 @@ function computeC(msg, X) {
     return mclService.generateFr(intValue);
 }
 
-async function verifySignature(payload) {
+function verifySignature(payload) {
     const A = mclService.generateG1(payload.A);
     const X = mclService.generateG1(payload.X);
     const s = mclService.generateFr(payload.s);

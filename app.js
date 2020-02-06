@@ -5,6 +5,7 @@ const OpenApiValidator = require('express-openapi-validator').OpenApiValidator;
 const app = express();
 
 const { LOGGER } = require('./logging');
+const { CONFIG } = require('./config');
 
 var argv = (process.argv.slice(2));
 let server;
@@ -30,7 +31,7 @@ app.use(express.json());
 // });
 
 
-let PORT = 8443;
+let PORT = CONFIG.HTTPS_PORT;
 
 if (argv.includes('--https')) {
     const https = require('https');
@@ -38,7 +39,7 @@ if (argv.includes('--https')) {
     server = https.createServer(credentials, app);
     communicate = `[Server Start] HTTPS Server listening on port ${PORT}!`;
 } else {
-    PORT = 8080;
+    PORT = CONFIG.HTTP_PORT;
     const http = require('http');
     server = http.createServer(app);
     communicate = `[Server Start] HTTP Server listening on port ${PORT}!`;

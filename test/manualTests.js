@@ -64,6 +64,7 @@ async function performAvailableProtocols(url, HTTPMethods) {
             const protocolFunction = MY_PROTOCOLS[protocol];
             console.log(`Performing ${protocol}`);
             await protocolFunction(url, HTTPMethods);
+            console.log(`${protocol} finished`);
         } else {
             console.log(`${protocol} not supported`)
         }

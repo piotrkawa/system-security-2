@@ -10,7 +10,7 @@ router.post('/verify', async function (req, res) {
     LOGGER.log({message: `[SSS Verify] Payload: ${JSON.stringify(payload)}`});
 
     try {
-        const isValid = await sssService.verifySignature(payload);
+        const isValid = sssService.verifySignature(payload);
         LOGGER.log({message: `[SSS Verify] Valid: ${isValid}`});
         res.send({'valid': isValid});
     } catch (e) {
