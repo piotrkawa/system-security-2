@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/piotrkawa/system-security-2#readme",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "body-parser": "^1.19.0",
     "chacha": "^2.1.0",
     "chai": "^4.2.0",
