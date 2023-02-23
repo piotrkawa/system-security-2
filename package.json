@@ -31,7 +31,7 @@
     "mcl-wasm": "^0.3.7",
     "mocha": "^6.2.2",
     "morgan": "^1.9.1",
-    "sequelize": "^5.19.6",
+    "sequelize": "^6.28.2",
     "sha3": "^2.0.7",
     "sqlite3": "^4.1.0",
     "supertest": "^4.0.2",
